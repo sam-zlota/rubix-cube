@@ -1,6 +1,7 @@
 from model import Cube
 from constants import up, down, left, right, front, back, y, w, r, o, g, b
 from solver import Solver
+import random
 
 test_w = [['b', 'o', 'r'], ['r', 'w', 'w'], ['g', 'y', 'y']]
 test_y = [['w', 'y', 'b'], ['o', 'y', 'b'], ['r', 'r', 'r']]
@@ -14,14 +15,11 @@ def get_mixed_cube():
     Returns a mixed up rubik's cube
     '''
     c = Cube()
+    
+    actions = ["U", "U'", "F","F'","L", "L'", "R", "R'", "B", "B'", "D", "D'"]
 
-    c.color_dict['w'] = [['b', 'o', 'r'], ['r', 'w', 'w'], ['g', 'y', 'y']]
-    c.color_dict['y'] = [['w', 'y', 'b'], ['o', 'y', 'b'], ['r', 'r', 'r']]
-    c.color_dict['g'] = [['o', 'o', 'g'], ['y', 'g', 'w'], ['g', 'r', 'o']]
-    c.color_dict['b'] = [['w', 'g', 'y'], ['y', 'b', 'w'], ['o', 'g', 'y']]
-    c.color_dict['r'] = [['b', 'r', 'y'], ['g', 'r', 'g'], ['g', 'b', 'o']]
-    c.color_dict['o'] = [['r', 'b', 'b'], ['o', 'o', 'b'], ['w', 'w', 'w']]
-
+    for i in range(100):
+        c.apply(random.choice(actions))
     return c
 
 
@@ -141,14 +139,41 @@ def test_rotate(direction, prime):
     print(c.print_v2())
 
 def test_solve_daisy():
-    c = get_mixed_cube()
-    print('start state')
-    print(c.print_v2())
-    s = Solver(c)
-    sequence = c.solve(s)
+
+    for i in range(10):
+        print("running test: ", i)
+        c = get_mixed_cube()
+        # print("'start state')
+        print(c.print_v2())
+        s = Solver(c)
+        assert not s.check_daisy()
+        sequence = s.solve_daisy()
+        print(sequence)
+        assert s.check_daisy()
+        print(c.print_v2())
+
     
-    return sequence
+    print("test passed!")
+
+
+def test_solve_white_cross():
+
+    for i in range(10):
+        # print("running test: ", i)
+        c = get_mixed_cube()
+        # print("'start state')
+        # print(c.print_v2())
+        s = Solver(c)
+        assert not s.check_white_cross()
+        sequence = s.solve_daisy()
+        sequence+= s.solve_white_cross()
+        print(sequence)
+        assert s.check_white_cross()
+        print("success")
+
+    
+    print("test passed!")
 
 if __name__ == "__main__":
     #test_reorient('down')
-    print(test_solve_daisy())
+    test_solve_white_cross()

@@ -77,6 +77,7 @@ class Cube:
         self.face_rotate(self.orient_dict[up], True)
         # rotate bottom counterclockwise
         self.face_rotate(self.orient_dict[down], False)
+        return "LL"
 
 
     def cube_rot_right(self):
@@ -91,7 +92,7 @@ class Cube:
         # rotate down clockwise
         self.face_rotate(self.orient_dict[down], True)
 
-        return 'rotate right'
+        return 'RR'
 
     def cube_rot_up(self):
         '''
@@ -110,6 +111,7 @@ class Cube:
         # rotate back clockwise twice (180 degrees)
         self.face_rotate(self.orient_dict[back], True)
         self.face_rotate(self.orient_dict[back], True)
+        return "UU"
 
     def cube_rot_down(self):
         '''
@@ -128,6 +130,7 @@ class Cube:
         # rotate back clockwise twice (180 degrees)
         self.face_rotate(self.orient_dict[back], True)
         self.face_rotate(self.orient_dict[back], True)
+        return "DD"
         
     def face_rotate(self, color, clockwise):
         ''' rotates a face 90 degrees clockwise or counterclockwise
@@ -244,31 +247,14 @@ class Cube:
                 return "B"
 
     def apply(self, action):
-        #legal moves
-        if action == "U":
-            self.rot_U(False)
-        elif action == "U'":
-            self.rot_U(True)
-        elif action == "D":
-            self.rot_D(False)
-        elif action == "D'":
-            self.rot_D(True)
-        elif action == "L":
-            self.rot_L(False)
-        elif action == "L'":
-            self.rot_L(True)
-        elif action == "R":
-            self.rot_R(False)
-        elif action == "R'":
-            self.rot_R(True)
-        elif action == "F":
-            self.rot_F(False)
-        elif action == "F'":
-            self.rot_F(True)
-        elif action == "B":
-            self.rot_B(False)
-        elif action == "B'":
-            self.rot_B(True)
+        #legal mov
+        #U R L etc
+        if len(action) == 1:
+            self.rotate(action[0], False)
+        elif action[1] == "'":
+            #U' etc
+            self.rotate(action[0], True)
+      
         #cube rots
         elif action == "LL":
             self.cube_rot_left()

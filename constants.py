@@ -1,9 +1,9 @@
-up = "up"
-down = "down"
-left = "left"
-right = "right"
-front = "front"
-back = "back"
+up = "U"
+down = "D"
+left = "L"
+right = "R"
+front = "F"
+back = "B"
 
 
 yellow = y ="y"

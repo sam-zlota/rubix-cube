@@ -205,16 +205,40 @@ class Cube:
     def rotate(self, direction, prime):
         if direction == up:
             self.rot_U(prime)
+            if prime:
+                return "U'"
+            else:
+                return "U"
         if direction == down:
             self.rot_D(prime)
+            if prime:
+                return "D'"
+            else:
+                return "D"
         if direction == left:
             self.rot_L(prime)
+            if prime:
+                return "L'"
+            else:
+                return "L"
         if direction == right:
             self.rot_R(prime)
+            if prime:
+                return "R'"
+            else:
+                return "R"
         if direction == front:
             self.rot_F(prime)
+            if prime:
+                return "F'"
+            else:
+                return "F"
         if direction == back:
             self.rot_B(prime)
+            if prime:
+                return "B'"
+            else:
+                return "B"
 
     def apply(self, action):
         #legal moves
@@ -260,5 +284,6 @@ class Cube:
             self.apply(action)
 
     def solve(self, solver):
-        seq = solver.solve(self)
-        self.apply_seq(seq)
+        seq = solver.solve()
+        #self.apply_seq(seq)
+        return seq

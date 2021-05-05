@@ -1,5 +1,6 @@
 from model import Cube
 from constants import up, down, left, right, front, back, y, w, r, o, g, b
+from solver import Solver
 
 test_w = [['w', 'o', 'b'], ['y', 'w', 'b'], ['o', 'w', 'b']]
 test_y = [['b', 'g', 'y'], ['y', 'y', 'w'], ['y', 'b', 'r']]
@@ -139,7 +140,13 @@ def test_rotate(direction, prime):
     # print new state
     print(c.print_v2())
 
+def test_solve_daisy():
+    c = get_mixed_cube()
+    s = Solver(c)
+    sequence = c.solve(s)
+
+    return sequence
 
 if __name__ == "__main__":
     #test_reorient('down')
-    test_rotate(back, True)
+    test_solve_daisy()

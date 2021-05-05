@@ -126,6 +126,20 @@ def test_cube_rot_down():
     # print new state
     print(c.print_v2())
 
+
+def test_rotate(direction, prime):
+    c = get_mixed_cube()
+
+    # print original state 
+    print(c.print_v2())
+
+    # rotate down
+    c.rotate(direction,prime)
+
+    # print new state
+    print(c.print_v2())
+
+
 if __name__ == "__main__":
     #test_reorient('down')
-    test_cube_rot_down()
+    test_rotate(back, True)

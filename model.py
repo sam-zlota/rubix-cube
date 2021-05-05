@@ -9,17 +9,14 @@ dictionary containing cube arrays with color as keys and array as values.
 class Cube:    
     def __init__(self):
         self.orient_dict = {up:y, down:w, front:b, back:g, left:o, right:r}
-        
         self.color_dict = {y:fill(3,y),w:fill(3,w),g:fill(3,g), b:fill(3,b), r:fill(3,r), o:fill(3,o)}
- 
-        
+      
     def print_out(self):
         for color in colors:
             face = self.color_dict[color]
             for i in range(3):
                 print(face[i][0], face[i][1], face[i][2])
-                
-                
+                            
     def print_v2(self):
         '''
         Prints current state of rubik's cube
@@ -50,7 +47,6 @@ class Cube:
 
         return out
 
-    
     def reorient(self, up_face, front_face, left_face):
         ''' reorient the cube by assigning the given up, front, and left colors to self.orient_dict. 
         The other faces are determined from the given face colors.
@@ -155,82 +151,114 @@ class Cube:
                 
 
         self.color_dict[color] = [new_top, new_middle, new_bottom]
-        
-
-    def rotate(self, direction, prime):
-        if direction == up:
-            rot_U(prime)
-        if direction == down:
-            rot_D(prime)
-        if direction == left:
-            rot_L(prime)
-        if direction == right:
-            rot_R(prime)
-        if direction == front:
-            rot_F(prime)
-        if direction == back:
-            rot_B(prime)
-            
+           
     def rot_U(self, prime):
         top_front = self.color_dict[self.orient_dict[front]][0].copy()
         top_left = self.color_dict[self.orient_dict[left]][0].copy()
         top_back = self.color_dict[self.orient_dict[back]][0].copy()
         top_right = self.color_dict[self.orient_dict[right]][0].copy()
         
-        if prime:
+        if prime:        
             self.color_dict[self.orient_dict[front]][0] = top_left
             self.color_dict[self.orient_dict[left]][0] = top_back
             self.color_dict[self.orient_dict[back]][0] = top_right
             self.color_dict[self.orient_dict[right]][0] = top_front
+            self.face_rotate(self.orient_dict[up], False)
         else:
             self.color_dict[self.orient_dict[front]][0] = top_right
             self.color_dict[self.orient_dict[left]][0] = top_front
             self.color_dict[self.orient_dict[back]][0] = top_left
             self.color_dict[self.orient_dict[right]][0] = top_back
+            self.face_rotate(self.orient_dict[up], True)
     
-        
     def rot_D(self, prime):
-        bot_front = self.color_dict[self.orient_dict[front]][2].copy()
-        bot_left = self.color_dict[self.orient_dict[left]][2].copy()
-        bot_back = self.color_dict[self.orient_dict[back]][2].copy()
-        bot_right = self.color_dict[self.orient_dict[right]][2].copy()
-        
-        if prime:
-            self.color_dict[self.orient_dict[front]][2] = bot_left
-            self.color_dict[self.orient_dict[left]][2] = bot_back
-            self.color_dict[self.orient_dict[back]][2] = bot_right
-            self.color_dict[self.orient_dict[right]][2] = bot_front
-        else:
-            self.color_dict[self.orient_dict[front]][2] = bot_right
-            self.color_dict[self.orient_dict[left]][2] = bot_front
-            self.color_dict[self.orient_dict[back]][2] = bot_left
-            self.color_dict[self.orient_dict[right]][2] = bot_back
-        
-        
-    def rot_L(self, prime):
-        old_up = self.orient_dict[up] # y
-        old_front = self.orient_dict[front] # b
-        old_left = self.orient_dict[left] # o
-        
-        # reorient cube      o                      b                       w
-        self.reorient(self.orient_dict[left], self.orient_dict[front], self.orient_dict[down])
-        self.print_v2()
-        
-        # make rotation
+        self.cube_rot_up()
+        self.cube_rot_up()
         self.rot_U(prime)
-        self.print_v2()
-        
-        # reorient cube y        b          o
-        self.reorient(old_up, old_front, old_left)
-        self.print_v2()
+        self.cube_rot_down()
+        self.cube_rot_down()
+
+    def rot_L(self, prime):
+        self.cube_rot_right()
+        self.cube_rot_up()
+        self.rot_U(prime)
+        self.cube_rot_down()
+        self.cube_rot_left()
         
     def rot_R(self, prime):
-        pass
+        self.cube_rot_left()
+        self.cube_rot_up()
+        self.rot_U(prime)
+        self.cube_rot_down()
+        self.cube_rot_right()
         
     def rot_F(self, prime):
-        pass
+        self.cube_rot_up()
+        self.rot_U(prime)
+        self.cube_rot_down()
         
     def rot_B(self, prime):
-        pass
+        self.cube_rot_down()
+        self.rot_U(prime)
+        self.cube_rot_up()
 
-        
+    def rotate(self, direction, prime):
+        if direction == up:
+            self.rot_U(prime)
+        if direction == down:
+            self.rot_D(prime)
+        if direction == left:
+            self.rot_L(prime)
+        if direction == right:
+            self.rot_R(prime)
+        if direction == front:
+            self.rot_F(prime)
+        if direction == back:
+            self.rot_B(prime)
+
+    def apply(self, action):
+        #legal moves
+        if action == "U":
+            self.rot_U(False)
+        elif action == "U'":
+            self.rot_U(True)
+        elif action == "D":
+            self.rot_D(False)
+        elif action == "D'":
+            self.rot_D(True)
+        elif action == "L":
+            self.rot_L(False)
+        elif action == "L'":
+            self.rot_L(True)
+        elif action == "R":
+            self.rot_R(False)
+        elif action == "R'":
+            self.rot_R(True)
+        elif action == "F":
+            self.rot_F(False)
+        elif action == "F'":
+            self.rot_F(True)
+        elif action == "B":
+            self.rot_B(False)
+        elif action == "B'":
+            self.rot_B(True)
+        #cube rots
+        elif action == "LL":
+            self.cube_rot_left()
+        elif action == "RR":
+            self.cube_rot_right()
+        elif action == "DD":
+            self.cube_rot_down()
+        elif action == "UU":
+            self.cube_rot_up()
+        else:
+            raise Error
+            
+    def apply_seq(self, seq):
+        actions = seq.split()
+        for action in actions:
+            self.apply(action)
+
+    def solve(self, solver):
+        seq = solver.solve(self)
+        self.apply_seq(seq)

@@ -18,10 +18,10 @@ class Solver:
         '''
         steps = [] # to contain steps taken to solve
 
-        #while True:
-        print('original state')
-        print(self.cube.print_v2())
-        for i in range(20):
+        while True:
+        #print('original state')
+        #print(self.cube.print_v2())
+        #for i in range(20):
             #print('outer loop')
 
             # daisy is solved
@@ -30,11 +30,11 @@ class Solver:
 
             # check for white piece already facing up
             if self.cube.color_dict[self.cube.orient_dict[up]][2][1] == w:
-                print('up rotate')
+                #print('up rotate')
                 # rotate up prime
                 step = self.cube.rotate(up, True)
                 steps.append(step)
-                print(self.cube.print_v2())
+                #print(self.cube.print_v2())
             else:
                 # search face
                 while True:
@@ -46,7 +46,14 @@ class Solver:
 
                     # check for edge already in top layer
                     if front_face[0][1] == w:
-                        print('already on top')
+                        #print('already on top')
+
+
+                        # rotate one face right
+                        step = self.cube.cube_rot_right()
+                        steps.append('rotate one face right')
+
+
                         # rotate right prime
                         step = self.cube.rotate(right, True)
                         steps.append(step)
@@ -56,44 +63,44 @@ class Solver:
                         # rotate front prime
                         step = self.cube.rotate(front, True)
                         steps.append(step)
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                     # middle left edge
                     elif front_face[1][0] == w:
-                        print('middle left edge')
+                        #print('middle left edge')
                         # rotate front not prime
                         step = self.cube.rotate(front, False)
                         steps.append(step)
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                     # middle right edge
                     elif front_face[1][2] == w:
-                        print('middle right edge')
+                        #print('middle right edge')
                         # rotate front prime
                         step = self.cube.rotate(front, True)
                         steps.append(step)
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                     # bottom edge
                     elif front_face[2][1] == w:
-                        print('bottom edge')
+                        #print('bottom edge')
                         # rotate front twice
                         step = self.cube.rotate(front, False)
                         steps.append(step)
                         step = self.cube.rotate(front, False)
                         steps.append(step)
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                     # down face
                     elif down_face[0][1] == w:
-                        print('down face')
+                        #print('down face')
                         # rotate front twice
                         step = self.cube.rotate(front, False)
                         steps.append(step)
                         step = self.cube.rotate(front, False)
                         steps.append(step)
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                     else:
-                        print('face rotate')
+                        #print('face rotate')
                         # rotate face and break from while loop
                         self.cube.cube_rot_left()
-                        print(self.cube.print_v2())
+                        #print(self.cube.print_v2())
                         break
 
         return steps

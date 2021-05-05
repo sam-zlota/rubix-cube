@@ -78,6 +78,7 @@ class Cube:
         # rotate bottom counterclockwise
         self.face_rotate(self.orient_dict[down], False)
 
+
     def cube_rot_right(self):
         '''
         Rotates a rubik's cube right one face
@@ -89,6 +90,8 @@ class Cube:
         self.face_rotate(self.orient_dict[up], False)
         # rotate down clockwise
         self.face_rotate(self.orient_dict[down], True)
+
+        return 'rotate right'
 
     def cube_rot_up(self):
         '''

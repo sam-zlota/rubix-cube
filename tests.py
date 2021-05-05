@@ -2,12 +2,12 @@ from model import Cube
 from constants import up, down, left, right, front, back, y, w, r, o, g, b
 from solver import Solver
 
-test_w = [['w', 'o', 'b'], ['y', 'w', 'b'], ['o', 'w', 'b']]
-test_y = [['b', 'g', 'y'], ['y', 'y', 'w'], ['y', 'b', 'r']]
-tets_g = [['g', 'o', 'o'], ['o', 'g', 'g'], ['r', 'r', 'w']]
-test_b = [['o', 'r', 'b'], ['r', 'b', 'r'], ['g', 'b', 'o']]
-test_r = [['w', 'o', 'r'], ['g', 'r', 'y'], ['y', 'w', 'y']]
-test_o = [['w', 'g', 'g'], ['w', 'o', 'y'], ['g', 'b', 'r']]
+test_w = [['b', 'o', 'r'], ['r', 'w', 'w'], ['g', 'y', 'y']]
+test_y = [['w', 'y', 'b'], ['o', 'y', 'b'], ['r', 'r', 'r']]
+tets_g = [['o', 'o', 'g'], ['y', 'g', 'w'], ['g', 'r', 'o']]
+test_b = [['w', 'g', 'y'], ['y', 'b', 'w'], ['o', 'g', 'y']]
+test_r = [['b', 'r', 'y'], ['g', 'r', 'g'], ['g', 'b', 'o']]
+test_o = [['r', 'b', 'b'], ['o', 'o', 'b'], ['w', 'w', 'w']]
 
 def get_mixed_cube():
     '''
@@ -15,12 +15,12 @@ def get_mixed_cube():
     '''
     c = Cube()
 
-    c.color_dict['w'] = [['w', 'o', 'b'], ['y', 'w', 'b'], ['o', 'w', 'b']]
-    c.color_dict['y'] = [['b', 'g', 'y'], ['y', 'y', 'w'], ['y', 'b', 'r']]
-    c.color_dict['g'] = [['g', 'o', 'o'], ['o', 'g', 'g'], ['r', 'r', 'w']]
-    c.color_dict['b'] = [['o', 'r', 'b'], ['r', 'b', 'r'], ['g', 'b', 'o']]
-    c.color_dict['r'] = [['w', 'o', 'r'], ['g', 'r', 'y'], ['y', 'w', 'y']]
-    c.color_dict['o'] = [['w', 'g', 'g'], ['w', 'o', 'y'], ['g', 'b', 'r']]
+    c.color_dict['w'] = [['b', 'o', 'r'], ['r', 'w', 'w'], ['g', 'y', 'y']]
+    c.color_dict['y'] = [['w', 'y', 'b'], ['o', 'y', 'b'], ['r', 'r', 'r']]
+    c.color_dict['g'] = [['o', 'o', 'g'], ['y', 'g', 'w'], ['g', 'r', 'o']]
+    c.color_dict['b'] = [['w', 'g', 'y'], ['y', 'b', 'w'], ['o', 'g', 'y']]
+    c.color_dict['r'] = [['b', 'r', 'y'], ['g', 'r', 'g'], ['g', 'b', 'o']]
+    c.color_dict['o'] = [['r', 'b', 'b'], ['o', 'o', 'b'], ['w', 'w', 'w']]
 
     return c
 
@@ -142,11 +142,13 @@ def test_rotate(direction, prime):
 
 def test_solve_daisy():
     c = get_mixed_cube()
+    print('start state')
+    print(c.print_v2())
     s = Solver(c)
     sequence = c.solve(s)
-
+    
     return sequence
 
 if __name__ == "__main__":
     #test_reorient('down')
-    test_solve_daisy()
+    print(test_solve_daisy())

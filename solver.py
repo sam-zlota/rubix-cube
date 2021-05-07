@@ -134,6 +134,75 @@ class Solver:
 
         return white_cross and centers_matched
 
+    def solve_white_corners(self):
+        # while step is not solved
+        while not self.check_white_corners():
+            front_color = self.cube.orient_dict[front]
+            front_face = self.cube.color_dict[front_color]
+
+            top_color = self.cube.orient_dict[top]
+            top_face = self.cube.color_dict[top_color]
+
+            right_color = self.cube.orient_dict[right]
+            right_face = self.cube.color_dict[right_color]
+
+            down_color = self.cube.orient_dict[down]
+            down_face = self.cube.color_dict[down_color]
+
+            # check if corner piece is in top layer but wrong location
+            corner_correct = front_face[0][2] == front_face[0][1] and right_face[0][0] == right_face[0][1]
+            if top_face[2][0] == w and not corner_correct:
+                # R' D' R
+                pass 
+                
+            # check for corner piece with white tile in bottom layer and right side front face
+            if front_face[2][2] == w: 
+                # check for corner piece in correct position (other face colors match)
+                if down_face[0][2] == front_face[1][1] and right_face[2][0] == right_face[1][1]:
+                    # D' R' D R
+                    self.cube.rotate('down', True)
+                    self.cube.rotate('right', True)
+                    self.cube.rotate('down', False)
+                    self.cube.rotate('right', False)
+                else:
+                    # D
+            # check for corner piece with white tile in bottom layer and left side right face
+            elif right_face[2][0] == w:
+                # check for corner piece in correct position (other face colors match)
+                if front_face[2][2] == front_face[1][1] and down_face[0][2] == right_face[1][1]:
+                    # D L D' L'     
+                else
+                    # D
+            # check for corner piece with white tile in bottom layer and right side down face
+            elif down_face[0][2] == w:
+                # move so facing front
+                # F D' F' D2
+                # check for corner piece in correct position (other face colors match)
+                if front_face[1][1] == front_face[2][2] and right_face[2][0] == right_face[1][1]:
+                    pass
+
+
+    def check_white_corners(self):
+        '''
+        Checks if step 3 is complete assuming orientation, white top, yellow bottom
+        '''
+        white_face = self.cube.color_dict[w]
+        white_row_one = white_face[0][0] == w and white_face[0][1] == w and white_face[0][2] == w
+        white_row_two = white_face[1][0] == w and white_face[1][1] == w and white_face[1][2] == w
+        white_row_three = white_face[2][0] == w and white_face[2][1] == w and white_face[3][2] == w
+
+        white_solved = white_row_one and white_row_two and white_row_three
+
+        faces = [o, g, b, r]
+        solved = []
+
+        for face in faces:
+            current_face = self.cube.color_dict[face]
+
+            current_solved = current_face[0][0] and current_face[0][1] and current_face[0][2] and current_face[1][1]
+            solved.append(current_solved)
+
+        return (sum(solved) == len(solved)) and white_solved
 
 
 

@@ -48,29 +48,29 @@ def cube_solved(cube):
         solved = solved and face_solved(color, face)
     return solved
 
-def face_equal(face1, face2):
-    """
-        Determines if two faces are equal.
-    """
-    equal = True
-    n = len(face1)
-    for i in range(n):
-        for j in range(n):
-            equal = equal and (face1[i][j] == face2[i][j])
-    return equal
+# def face_equal(face1, face2):
+#     """
+#         Determines if two faces are equal.
+#     """
+#     equal = True
+#     n = len(face1)
+#     for i in range(n):
+#         for j in range(n):
+#             equal = equal and (face1[i][j] == face2[i][j])
+#     return equal
 
-def cube_equal(cube1, cube2):
-    """
-        Determines if two cubes are equal.
-    """
-    equal = True
-    cube1_faces = list(cube1.color_dict.values())
-    cube2_faces = list(cube2.color_dict.values())
-    n = len(cube1_faces)
+# def cube_equal(cube1, cube2):
+#     """
+#         Determines if two cubes are equal.
+#     """
+#     equal = True
+#     cube1_faces = list(cube1.color_dict.values())
+#     cube2_faces = list(cube2.color_dict.values())
+#     n = len(cube1_faces)
 
-    for i in range(n):
-        equal = equal and (face_equal(cube1_faces[i], cube2_faces[i]))
-    return equal
+#     for i in range(n):
+#         equal = equal and (face_equal(cube1_faces[i], cube2_faces[i]))
+#     return equal
 
 def get_opposite(color):
     '''

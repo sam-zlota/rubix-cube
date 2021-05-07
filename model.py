@@ -1,5 +1,5 @@
 from constants import up, down, left, right, front, back, y, w, r, o, g, b
-from utils import get_opposite, fill
+from utils import *
 
 '''
 Represents data structure for cube with dictionary containing orientation based on color. Orientation dict has 
@@ -11,13 +11,13 @@ class Cube:
         self.orient_dict = {up:y, down:w, front:b, back:g, left:o, right:r}
         self.color_dict = {y:fill(3,y),w:fill(3,w),g:fill(3,g), b:fill(3,b), r:fill(3,r), o:fill(3,o)}
       
-    def print_out(self):
-        for color in colors:
-            face = self.color_dict[color]
-            for i in range(3):
-                print(face[i][0], face[i][1], face[i][2])
+    # def print_out(self):
+    #     for color in colors:
+    #         face = self.color_dict[color]
+    #         for i in range(3):
+    #             print(face[i][0], face[i][1], face[i][2])
                             
-    def print_v2(self):
+    def __str__(self):
         '''
         Prints current state of rubik's cube
         ''' 
@@ -46,6 +46,40 @@ class Cube:
             out += "         " + down_face[i][0] + "  " + down_face[i][1] + "  " + down_face[i][2] + "            " + "\n"
 
         return out
+
+    def __eq__(self, other):
+        if not isinstance(other, Cube):
+            return False
+        else:
+            equal = True
+            for color, face in self.color_dict.items():
+                other_face = other.color_dict[color]
+                face_equal = True
+                for i in range(3):
+                    for j in range(3):
+                        face_equal = face_equal and (face[i][j] == other_face[i][j])
+                equal = equal and face_equal      
+            return equal
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        color_map = {w: 163 ,y:113,g:151,b:173, r:71, o:239}
+
+        h = 1
+        for color, face in self.color_dict.items():
+            
+            sub_hash = 1
+            ctr = 1
+            for i in range(3):
+                for j in range(3):
+                    sub_hash += (ctr * 109 * color_map[face[i][j]])
+                    ctr+=1
+            h *= sub_hash
+        
+        return h
+    
 
     def reorient(self, up_face, front_face, left_face):
         ''' reorient the cube by assigning the given up, front, and left colors to self.orient_dict. 
@@ -268,8 +302,3 @@ class Cube:
         
         for action in seq:
             self.apply(action)
-
-    # def solve(self, solver):
-    #     seq = solver.solve()
-    #     #self.apply_seq(seq)
-    #     return seq

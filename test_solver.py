@@ -30,7 +30,7 @@ def test_solve_daisy():
 
 def test_solve_white_cross():
 
-    for i in range(10):
+    for i in range(1):
         # print("running test: ", i)
         c = get_mixed_cube()
         # print("'start state')
@@ -46,8 +46,25 @@ def test_solve_white_cross():
     
     print("test passed!")
 
+def test_solve_white_corners():
+    for i in range(10):
+        # print("running test: ", i)
+        c = get_mixed_cube()
+        # print("'start state')
+        # print(c.print_v2())
+        s = Solver(c)
+        assert not s.check_white_corners()
+        sequence = s.solve()
+        print(sequence)
+        print(s.cube)
+        assert s.check_white_corners()
+        print("success")
+
+    
+    print("test passed!")
+    
 
 
 if __name__ == "__main__":
     #test_reorient('down')
-    test_solve_white_cross()
+    test_solve_white_corners()

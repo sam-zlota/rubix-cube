@@ -79,7 +79,6 @@ class Cube:
         self.face_rotate(self.orient_dict[down], False)
         return "LL"
 
-
     def cube_rot_right(self):
         '''
         Rotates a rubik's cube right one face
@@ -247,8 +246,6 @@ class Cube:
                 return "B"
 
     def apply(self, action):
-        #legal mov
-        #U R L etc
         if len(action) == 1:
             self.rotate(action[0], False)
         elif action[1] == "'":
@@ -268,11 +265,11 @@ class Cube:
             raise Error
             
     def apply_seq(self, seq):
-        actions = seq.split()
-        for action in actions:
+        
+        for action in seq:
             self.apply(action)
 
-    def solve(self, solver):
-        seq = solver.solve()
-        #self.apply_seq(seq)
-        return seq
+    # def solve(self, solver):
+    #     seq = solver.solve()
+    #     #self.apply_seq(seq)
+    #     return seq

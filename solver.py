@@ -32,14 +32,9 @@ class Solver:
             if top_face[2][1] == w: 
                 step = self.cube.rotate(up, False)
                 steps.append(step)
-
-                # step = self.cube.cube_rot_left()
-                # steps.append(step)
                 continue
    
             if front_face[0][1] == w:
-                # print('already on top')
-                # rotate one face right
                 step = self.cube.cube_rot_right()
                 steps.append(step)
 
@@ -53,32 +48,23 @@ class Solver:
                 step = self.cube.rotate(front, True)
                 steps.append(step)
 
-                # step = self.cube.cube_rot_left()
-                # steps.append(step)
-                #print(self.cube.print_v2())
             # middle left edge
             elif front_face[1][0] == w:
-                # print('middle left edge')
                 # rotate front not prime
                 step = self.cube.rotate(front, False)
                 steps.append(step)
-                #print(self.cube.print_v2())
             # middle right edge
             elif front_face[1][2] == w:
-                # print('middle right edge')
                 # rotate front prime
                 step = self.cube.rotate(front, True)
                 steps.append(step)
-                #print(self.cube.print_v2())
             # bottom edge
             elif front_face[2][1] == w:
-                # print('bottom edge')
                 # rotate front twice
                 step = self.cube.rotate(front, False)
                 steps.append(step)
                 step = self.cube.rotate(front, False)
                 steps.append(step)
-                #print(self.cube.print_v2())
             # down face
             elif down_face[0][1] == w:
                 # print('down face')    
@@ -87,14 +73,10 @@ class Solver:
                 steps.append(step)
                 step = self.cube.rotate(front, False)
                 steps.append(step)
-                #print(self.cube.print_v2())
             else:
-                # continue
-                # print('face rotate')
                 # rotate face and break from while loop
                 step = self.cube.cube_rot_left()
                 steps.append(step)
-                #print(self.cube.print_v2())
 
         return steps
 

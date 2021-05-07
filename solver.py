@@ -201,11 +201,12 @@ class Solver:
             else:
                 self.cube.cube_rot_left()
 
-
     def check_white_corners(self):
         '''
         Checks if step 3 is complete assuming orientation, white top, yellow bottom
         '''
+        assert self.check_daisy() and self.check_white_cross()
+        assert self.cube.orient_dict[up] == w and self.cube.orient_dict[down] == y
         white_face = self.cube.color_dict[w]
         white_row_one = white_face[0][0] == w and white_face[0][1] == w and white_face[0][2] == w
         white_row_two = white_face[1][0] == w and white_face[1][1] == w and white_face[1][2] == w

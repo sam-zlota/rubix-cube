@@ -76,51 +76,44 @@ def get_inverse_sequence(steps):
     return res
 
 def handle_repeats(steps):
-    """
-        If the steps to a solution have consecutive repeats of the same move, then this function
-        will filter them out appropriately.
+    res = []
+    curr = steps[0]
+    ctr = 1
+    for step in steps[1:]:
+        if step == curr:
+            ctr+=1
+        else:
+            repeats = ctr % 4
+            # print("reps", repeats)
+            if repeats == 1:
+                res.append(curr)
+            if repeats == 2:
+                # print("HERE")
+                res.append(curr)
+                res.append(curr)
+            if repeats == 3:
+                res.append(get_inverse(curr))
+            curr = step
+            ctr = 1
+    # 
+    repeats = ctr % 4
+    # print("reps", repeats)
+    if repeats == 1:
+        res.append(curr)
+    if repeats == 2:
+        res.append(curr)
+        res.append(curr)
+    if repeats == 3:
+        res.append(get_inverse(curr))
+    return res
 
-        (Ex.)
-        "L" -> "L"
-        "L L" -> "L L"
-        "L L L" -> "L'"
-        "L L L L" -> ""
-    """
-    # steps = steps.split()
-    soln = []
-
-    if len(steps) == 1:
-        return " ".join(steps)
-    if len(steps) > 1 and steps[1] != steps[0]:
-        soln.append(steps[0])
-
-    repeats = 1
-
-    # if len(steps) > 1 and steps[1] == steps[0]:
-    #     repeats = 2
-
-    i = 1
-    while i < len(steps):
-        if steps[i] != steps[i-1]:
-            soln.append(steps[i])
-            i+=1
-            continue
-    
-        while i < len(steps) and steps[i] == steps[i-1]:
-            repeats+=1
-            i+=1  
-        repeats = repeats % 4
-        # soln = soln[:-1]
-        if repeats == 1:
-            soln.append(steps[i - 1])
-        if repeats == 2:
-            soln.append(steps[i-1])
-            soln.append(steps[i-1])
-        if repeats == 3:
-            soln.append(get_inverse(steps[i-1]))
-        repeats = 1 
-    return soln
-
-
-
+def handle_inverses(steps):
+    res = []
+    res.append(steps[0])
+    for step in steps[1:]:
+        if len(res) > 0 and step == get_inverse(res[-1:][0]):
+            res = res[:-1]
+        else:
+            res.append(step)
+    return res
 

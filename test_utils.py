@@ -42,56 +42,54 @@ def test_cube_equal():
     print("time: ", (time.time() - start_time)*1000, "ms")
 
 
-def test_handle_repeats():
-
-    a = Cube()
-    b = Cube()
+def test_handle_inverses():
     start_time = time.time()
 
-    for _ in range(100):
-        random_sequence = get_random_seq()
-        pruned_sequence = handle_repeats(random_sequence)
-        a.apply_seq(random_sequence)
-        b.apply_seq(pruned_sequence)
-        assert cube_equal(a, b)
+    for i in range(3000):
+        test = get_random_seq()
+        test.extend(get_random_seq())
+        random.shuffle(test)
+        before = len(test)
+        c = Cube()
+        d = Cube()
 
-        a = Cube()
-        b = Cube()
+        shorter = handle_inverses(test)
+        # shorter = handle_repeats(test)
+        after = len(shorter)
+        if i % 100 == 0:
+            print(i, "completed")
+            print("sample: ", before, "===>", after, "| diff: ", before - after)
+        c.apply_seq(test)
+        d.apply_seq(shorter)
+        assert c == d
+    print("Success!")
+    print("time: ", (time.time() - start_time), "s")
 
+def test_handle_repeats():
+    start_time = time.time()
 
-    a = Cube()
-    b = Cube()
-    s_a = Solver(a)
-    s_b = Solver(b)
+    for i in range(1000):
+        test = get_random_seq()
+        test.extend(get_random_seq())
+        random.shuffle(test)
 
-    for _ in range(100):
-        random_sequence = get_random_seq()
-        print(random_sequence)
-        a.apply_seq(random_sequence)
-        b.apply_seq(random_sequence)
-        assert cube_equal(a, b)
+        before = len(test)
+        c = Cube()
+        d = Cube()
 
-        s_a = Solver(a)
-        s_b = Solver(b)
-        white_cross_sequence = s_a.solve()
-        pruned = handle_repeats(white_cross_sequence)
-        print(white_cross_sequence)
-        print(pruned)
-
-        print("Diff: ", len(white_cross_sequence) - len(pruned))
-        a.apply_seq(white_cross_sequence)
-        b.apply_seq(pruned)
-        assert s_a.check_white_cross()
-        assert cube_equal(a, b) 
-        
-        a = Cube()
-        b = Cube()
+        # shorter = handle_inverses(test)
+        shorter = handle_repeats(test)
+        after = len(shorter)
+        if i % 100 == 0:
+            print(i, "completed")
+            print("sample: ", before, "===>", after, "| diff: ", before - after)
+        c.apply_seq(test)
+        d.apply_seq(shorter)
+        assert c == d
+    print("Success!")
+    print("time: ", (time.time() - start_time), "s")
 
     
-    print("Success!")
-    print("time: ", (time.time() - start_time)*1000, "ms")
-
-
 
 def test_builtins():
     start_time = time.time()
@@ -118,4 +116,7 @@ if __name__ == "__main__":
     # test_cube_solved()
     # test_cube_equal()
     # test_handle_repeats()
-    test_builtins()
+    # test_builtins()
+    # test_handle_inverses()
+
+    test_handle_repeats()

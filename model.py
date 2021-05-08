@@ -58,7 +58,6 @@ class Cube:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    # def __hash__(self):
     def __hash__(self):
 
         color_map = {w: 163 ,y:113,g:151,b:173, r:193, o:239}

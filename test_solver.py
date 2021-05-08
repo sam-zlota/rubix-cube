@@ -3,6 +3,7 @@ from constants import *
 from utils import *
 from solver import Solver
 import random
+import time
 
 
 def get_mixed_cube():
@@ -29,22 +30,25 @@ def test_solve_daisy():
     print("test passed!")
 
 def test_solve_white_cross():
-
-    for i in range(1):
-        # print("running test: ", i)
+    start_time = time.time()
+    for i in range(1000):
         c = get_mixed_cube()
-        # print("'start state')
-        # print(c.print_v2())
         s = Solver(c)
         assert not s.check_white_cross()
-        sequence = s.solve_daisy()
-        sequence+= s.solve_white_cross()
-        print(sequence)
+        sequence = s.solve()
         assert s.check_white_cross()
-        print("success")
+        # acts = s.cube.actions
+        # b = Cube()
+        # b.apply_seq(acts)
+        # assert b == c
+        # z = Solver(b)
+        # assert z.check_white_cross()
+        if i % 100 == 0:
+            print(i, " complete")
 
     
-    print("test passed!")
+    print("Success!")
+    print("time: ", (time.time() - start_time), "s")
 
 def test_solve_white_corners():
     for i in range(10):
@@ -67,4 +71,4 @@ def test_solve_white_corners():
 
 if __name__ == "__main__":
     #test_reorient('down')
-    test_solve_white_corners()
+    test_solve_white_cross()

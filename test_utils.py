@@ -95,26 +95,27 @@ def test_handle_repeats():
 
 def test_builtins():
     start_time = time.time()
-    for i in range(100):
+    seen = []
+    for i in range(100000):
         a = Cube()
-        b = Cube()
-        a.apply_seq(get_random_seq())
         a.apply_seq(get_random_seq())
 
-        b.apply_seq(get_random_seq())
-        b.apply_seq(get_random_seq())
-        assert a != b
-        hash_a = hash(a)
-        hash_b = hash(b)
-        if i % 1000 == 0:
-            print("checked this many hashes: ", i)
-        assert hash_a != hash_b
+        hash_a = a.__hash__()
+        
+        if hash_a in seen:
+            print(">>>>>>>>>>>>>>>COLLISION<<<<<<<<<<<<<<<<")
+        seen.append(hash_a)
+        # try:
+        # except AssertionError as E:
+        #     print(a)
+        #     print(b)
+        #     raise AssertionError
 
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
 
 if __name__ == "__main__":
     # test_cube_solved()
-    test_cube_equal()
+    # test_cube_equal()
     # test_handle_repeats()
     test_builtins()

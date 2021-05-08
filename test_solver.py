@@ -37,12 +37,6 @@ def test_solve_white_cross():
         assert not s.check_white_cross()
         sequence = s.solve()
         assert s.check_white_cross()
-        # acts = s.cube.actions
-        # b = Cube()
-        # b.apply_seq(acts)
-        # assert b == c
-        # z = Solver(b)
-        # assert z.check_white_cross()
         if i % 100 == 0:
             print(i, " complete")
 
@@ -51,24 +45,25 @@ def test_solve_white_cross():
     print("time: ", (time.time() - start_time), "s")
 
 def test_solve_white_corners():
-    for i in range(10):
-        # print("running test: ", i)
+    start_time = time.time()
+    for i in range(1000):
         c = get_mixed_cube()
-        # print("'start state')
-        # print(c.print_v2())
         s = Solver(c)
         assert not s.check_white_corners()
         sequence = s.solve()
-        print(sequence)
-        print(s.cube)
         assert s.check_white_corners()
-        print("success")
+        if i % 250 == 0:
+            print(len(sequence), sequence)
+            print(s.cube)
+
+            print(i, " complete")
 
     
-    print("test passed!")
+    print("Success!")
+    print("time: ", (time.time() - start_time), "s")
     
 
 
 if __name__ == "__main__":
     #test_reorient('down')
-    test_solve_white_cross()
+    test_solve_white_corners()

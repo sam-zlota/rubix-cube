@@ -10,7 +10,7 @@ class Solver:
         '''
         self.solve_daisy()
         self.solve_white_cross()
-        # self.solve_white_corners()
+        self.solve_white_corners()
 
         return self.cube.actions
 
@@ -35,7 +35,7 @@ class Solver:
             # bottom edge or down face
             elif front_face[2][1] == w or down_face[0][1] == w:
                 # rotate front twice
-                self.cube.apply_seq(["F", "F"] )
+                self.cube.apply_seq(["F", "F"])
             else:
                 # rotate face and break from while loop
                 self.cube.apply_seq( ["LL"] )
@@ -90,184 +90,91 @@ class Solver:
         return white_cross and centers_matched
 
     def solve_white_corners(self):
-        # rotate face up twice so that white cross is on up face
-        self.cube.cube_rot_up()
-        self.cube.cube_rot_up()
-        assert(self.cube.orient_dict[up] == w)
+        def get_faces():
+            return self.cube.get_face_from_orient(front) , self.cube.get_face_from_orient(up), self.cube.get_face_from_orient(right), self.cube.get_face_from_orient(left), self.cube.get_face_from_orient(down)
 
-        # bring all incorrect white tiles to the bottom layer
-        for _ in range(3):
-            front_color = self.cube.orient_dict[front]
-            front_face = self.cube.color_dict[front_color]
+        def move_corner_in_between():
+            #corner is in bottom layer, so we need to rotate down until it is in between
+            #its two corresponding centers
+            front_face, top_face, right_face, left_face, down_face = get_faces()
+            front_color = None
 
-            top_color = self.cube.orient_dict[up]
-            top_face = self.cube.color_dict[top_color]
+            if front_face[2][2] == w:
+                front_color = down_face[0][2]
+            if right_face[2][0] == w:
+                front_color = front_face[2][2]
+            if down_face[0][2] == w:
+                front_color = right_face[2][0]
+            while front_face[1][1] != front_color:
+                self.cube.apply_seq(["D", "LL"])
+                front_face, top_face, right_face, left_face, down_face = get_faces()
 
-            right_color = self.cube.orient_dict[right]
-            right_face = self.cube.color_dict[right_color]
+        
+        def bring_corner_up():
+            front_face, top_face, right_face, left_face, down_face = get_faces()
+            #corner piece must be in bottom right corner of front face, so we can bring it up
+            if front_face[2][2] == w:
+                self.cube.apply_seq(["D'", "R'", "D", "R"])
+            if right_face[2][0] == w:
+                
+                self.cube.apply_seq(["LL", "D", "L", "D'", "L'", "RR"])
+            if down_face[0][2] == w:
+                self.cube.apply_seq(["F", "D'", "F'", "D", "D"])
+                bring_corner_up()
 
-            left_color = self.cube.orient_dict[left]
-            left_face = self.cube.color_dict[left_color]
+        #rotate face up twice so that white cross is on up face
+        self.cube.apply_seq(["UU", "UU"])
+        
+        #for each corner
+        while not self.check_white_corners():
+            front_face, top_face, right_face, left_face, down_face = get_faces()
 
-            down_color = self.cube.orient_dict[down]
-            down_face = self.cube.color_dict[down_color]
-
-            # top right corner is correct
             right_corner = top_face[2][2] == w and front_face[0][2] == front_face[1][1] and right_face[0][0] == right_face[1][1]
 
-            if not right_corner:
-                #right corner not correct
-                if top_face[2][2] == w or front_face[0][2] == w or right_face[0][0] == w:
-                    #while top_face[2][2] == w or front_face[0][2] == w or right_face[0][0] == w:
-                    # while face to come to top is white, rotate bottom until it is not white
-                    while down_face[2][0] == w:
-                        
-                        self.cube.rotate(down, False)
-
-                        front_color = self.cube.orient_dict[front]
-                        front_face = self.cube.color_dict[front_color]
-
-                        top_color = self.cube.orient_dict[up]
-                        top_face = self.cube.color_dict[top_color]
-
-                        right_color = self.cube.orient_dict[right]
-                        right_face = self.cube.color_dict[right_color]
-
-                        left_color = self.cube.orient_dict[left]
-                        left_face = self.cube.color_dict[left_color]
-
-                        down_color = self.cube.orient_dict[down]
-                        down_face = self.cube.color_dict[down_color]
-                        
-                    # but there is a white tile in the top right corner somewhere
-                    # then bring it down
-                    self.cube.rotate(right, True)
-                    self.cube.rotate(down, True)
-                    self.cube.rotate(right, False)
-
-                    front_color = self.cube.orient_dict[front]
-                    front_face = self.cube.color_dict[front_color]
-
-                    top_color = self.cube.orient_dict[up]
-                    top_face = self.cube.color_dict[top_color]
-
-                    right_color = self.cube.orient_dict[right]
-                    right_face = self.cube.color_dict[right_color]
-
-                    left_color = self.cube.orient_dict[left]
-                    left_face = self.cube.color_dict[left_color]
-
-                    down_color = self.cube.orient_dict[down]
-                    down_face = self.cube.color_dict[down_color]
-                    
-                    
-                    
-            #now rotate and reset variables
-            self.cube.cube_rot_left()
-        
-
-        # while step is not solved
-        while not self.check_white_corners():
-        #for i in range(20):
-            print(self.cube)
-            front_color = self.cube.orient_dict[front]
-            front_face = self.cube.color_dict[front_color]
-
-            top_color = self.cube.orient_dict[up]
-            top_face = self.cube.color_dict[top_color]
-
-            right_color = self.cube.orient_dict[right]
-            right_face = self.cube.color_dict[right_color]
-
-            down_color = self.cube.orient_dict[down]
-            down_face = self.cube.color_dict[down_color]
-
-            '''
-            # check if corner piece is in top layer but wrong location
-            corner_correct = front_face[0][2] == front_face[0][1] and right_face[0][0] == right_face[0][1]
-            if (top_face[2][2] == w and not corner_correct) or front_face[0][2] == w or right_face[0][0]:
-                # R' D' R
-                self.cube.rotate(right, True)
-                self.cube.rotate(down, True)
-                self.cube.rotate(right, False)
-
-                #self.cube.cube_rot_left()
-            '''
-
-            # check for corner piece with white tile in bottom layer and right side front face
-            if front_face[2][2] == w: 
-                # check for corner piece in correct position (other face colors match)
-                if down_face[0][2] == front_face[1][1] and right_face[2][0] == right_face[1][1]:
-                    # D' R' D R
-                    self.cube.rotate(down, True)
-                    self.cube.rotate(right, True)
-                    self.cube.rotate(down, False)
-                    self.cube.rotate(right, False)
-                else:
-                    # D
-                    self.cube.rotate(down, False)
-                    # face rotate right
-                    self.cube.cube_rot_left()
-            # check for corner piece with white tile in bottom layer and left side right face
-            elif right_face[2][0] == w:
-                # check for corner piece in correct position (other face colors match)
-                if front_face[2][2] == front_face[1][1] and down_face[0][2] == right_face[1][1]:
-                    # rotate face left
-                    self.cube.cube_rot_left()
-                    
-                    # D L D' L'
-                    self.cube.rotate(down, False)
-                    self.cube.rotate(left, False)
-                    self.cube.rotate(down, True)
-                    self.cube.rotate(left, True)
-                else:
-                    # D
-                    self.cube.rotate(down, False)
-                    # face rotate left
-                    self.cube.cube_rot_left()
-            # check for corner piece with white tile in bottom layer and right side down face
-            elif down_face[0][2] == w:
-                if top_face[2][2] != w:
-                    # move so facing front
-                    # F D' F' D2
-                    self.cube.rotate(front, False)
-                    self.cube.rotate(down, True)
-                    self.cube.rotate(front, True)
-                    self.cube.rotate(down, False)
-                    self.cube.rotate(down, False)
-                else:
-                    self.cube.rotate(down, False)
-                    self.cube.cube_rot_left()
-            
-            # rotate face
+            if top_face[2][2] == w or front_face[0][2] == w or right_face[0][0] == w:
+                if not right_corner:
+                    #bring her down into bottom right corner
+                    self.cube.apply_seq(["R'", "D'", "R", "D"])
+                    move_corner_in_between()
+                    bring_corner_up()
             else:
-                self.cube.cube_rot_left()
+                # check bottom layer
 
-        return ''
+                for _ in range(4):
+                    front_face, top_face, right_face, left_face, down_face = get_faces()
+                    if front_face[2][2] == w or right_face[2][0] == w or down_face[0][2] == w:
+                        #found a corner
+                        #get it in between the proper center pieces
+                        move_corner_in_between()
+                        bring_corner_up()
+                    else:
+                      self.cube.apply_seq(["D"])
+     
+            self.cube.apply_seq(["LL"])
 
-        def check_white_corners(self):
-            '''
-            Checks if step 3 is complete assuming orientation, white top, yellow bottom
-            '''
-            # assert self.check_daisy() and self.check_white_cross()
-            # assert self.cube.orient_dict[up] == w and self.cube.orient_dict[down] == y
-            white_face = self.cube.color_dict[w]
-            white_row_one = white_face[0][0] == w and white_face[0][1] == w and white_face[0][2] == w
-            white_row_two = white_face[1][0] == w and white_face[1][1] == w and white_face[1][2] == w
-            white_row_three = white_face[2][0] == w and white_face[2][1] == w and white_face[2][2] == w
+    def check_white_corners(self):
+        '''
+        Checks if step 3 is complete assuming orientation, white top, yellow bottom
+        '''
+        # assert self.check_daisy() and self.check_white_cross()
+        # assert self.cube.orient_dict[up] == w and self.cube.orient_dict[down] == y
+        white_face = self.cube.get_face_from_color(w)
+        white_row_one = white_face[0][0] == w and white_face[0][1] == w and white_face[0][2] == w
+        white_row_two = white_face[1][0] == w and white_face[1][1] == w and white_face[1][2] == w
+        white_row_three = white_face[2][0] == w and white_face[2][1] == w and white_face[2][2] == w
 
-            white_solved = white_row_one and white_row_two and white_row_three
+        white_solved = white_row_one and white_row_two and white_row_three
 
-            f = [o, g, b, r]
-            solved = []
+        f = [o, g, b, r]
+        solved = []
 
-            for face in f:
-                current_face = self.cube.color_dict[face]
+        for face in f:
+            current_face = self.cube.get_face_from_color(face)
 
-                current_solved = current_face[0][0] == face and current_face[0][1] == face and current_face[0][2] == face and current_face[1][1] == face
-                solved.append(current_solved)
-            print(sum(solved))
-            return sum(solved) == len(solved) and white_solved
+            current_solved = current_face[0][0] == face and current_face[0][1] == face and current_face[0][2] == face and current_face[1][1] == face
+            solved.append(current_solved)
+        # print(sum(solved))
+        return sum(solved) == len(solved) and white_solved
 
 
 

@@ -78,6 +78,19 @@ def test_solve_white_corners():
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
     
+def stress_test():
+    start_time = time.time()
+    for i in range(5000):
+        c = get_mixed_cube()
+        s = Solver(c)
+        assert not s.check_white_corners()
+        sequence = s.solve()
+        assert s.check_white_corners()
+        if i % 250 == 0:
+            print(i, "complete")
+    print("Success!")
+    print("time: ", (time.time() - start_time), "s")
+
 
 if __name__ == "__main__":
     #test_reorient('down')

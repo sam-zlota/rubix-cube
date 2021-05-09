@@ -1,5 +1,4 @@
-from constants import up, down, left, right, front, back, y, w, r, o, g, b
-
+from constants import *
 import random
 
 def get_random_seq():
@@ -7,7 +6,7 @@ def get_random_seq():
     Returns a mixed up rubik's cube sequence
     '''
     
-    actions = ["U", "U'", "F","F'","L", "L'", "R", "R'", "B", "B'", "D", "D'"]
+    actions = [UP, UP_PRIME, FRONT,FRONT_PRIME,LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME, BACK, BACK_PRIME, DOWN, DOWN_PRIME]
     seq = []
     for i in range(50):
         seq.append(random.choice(actions))
@@ -50,20 +49,20 @@ def get_opposite(color):
 def get_inverse(step):
     """
         Returns the inverse move for the given step. 
-        (Ex.) get_inverse("U") ->  "U'"
+        (Ex.) get_inverse(UP) ->  UP_PRIME
     """
     if len(step) == 1:
         return step + "'"
     elif step[1] == "'":
         return step[0]
-    elif step == "UU":
-        return "DD"
-    elif step == "DD":
-        return "UU"
-    elif step == "LL":
-        return "RR"
-    elif step == "RR":
-        return "LL"
+    elif step == CUBE_ROT_UP:
+        return CUBE_ROT_DOWN
+    elif step == CUBE_ROT_DOWN:
+        return CUBE_ROT_UP
+    elif step == CUBE_ROT_LEFT:
+        return CUBE_ROT_RIGHT
+    elif step == CUBE_ROT_RIGHT:
+        return CUBE_ROT_LEFT
     else:
         raise Error 
 
@@ -84,20 +83,16 @@ def handle_repeats(steps):
             ctr+=1
         else:
             repeats = ctr % 4
-            # print("reps", repeats)
             if repeats == 1:
                 res.append(curr)
             if repeats == 2:
-                # print("HERE")
                 res.append(curr)
                 res.append(curr)
             if repeats == 3:
                 res.append(get_inverse(curr))
             curr = step
             ctr = 1
-    # 
     repeats = ctr % 4
-    # print("reps", repeats)
     if repeats == 1:
         res.append(curr)
     if repeats == 2:

@@ -93,24 +93,54 @@ def stress_test():
 
 def test_solve_middle_layer():
     start_time = time.time()
-    for i in range(1000):
+    diff_sum =diff_prct= 0
+    n = 500
+    for i in range(n + 1):
         c = get_mixed_cube()
+        c.apply_seq(get_random_seq())
         s = Solver(c)
         assert not s.check_middle_layer()
         sequence = s.solve()
         assert s.check_middle_layer()
-        print(s.cube)
-        if i % 250 == 0:
+        cleaned = clean(sequence)
+        diff_sum+= (len(sequence) - len(cleaned))
+        diff_prct+= (1 - len(cleaned)/len(sequence))
+
+        b = Cube()
+        b.apply_seq(sequence)
+        z = Cube()
+        z.apply_seq(cleaned)
+        assert b == z
+        assert hash(b) == hash(z) 
+        if i % (n/5) == 0:
+            
             print(len(sequence), sequence)
+            print(len(cleaned), cleaned)
             print(s.cube)
 
             print(i, " complete")
 
-    
+    print("average diff:", diff_sum/n)
+    print("average percent diff:", diff_prct/n)
+
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
 
+def test_hash():
+    start = time.time()
+    iters = 10_000
+    samp = iters / 10
+    for i in range(iters):
+        c = Cube()
+        random_seq = get_random_seq()
+        c.apply_seq(random_seq)
+        h = c.__hash__()
+        if i % samp == 0:
+            print(i, "complete")
+            print(h)
+    print("Finished!")
+    print(iters, "iters\n ", "time: ", (time.time() - start), "s") 
+
 
 if __name__ == "__main__":
-    #test_reorient('down')
     test_solve_middle_layer()

@@ -1,5 +1,6 @@
 from constants import *
 from utils import *
+import numpy as np
 
 '''
 Represents data structure for cube with dictionary containing orientation based on color. Orientation dict has 
@@ -8,8 +9,8 @@ dictionary containing cube arrays with color as keys and array as values.
 '''
 class Cube:    
     def __init__(self):
-        self.__orient_dict = {UP:y, DOWN:w, FRONT:b, BACK:g, LEFT:o, RIGHT:r}
-        self.__color_dict = {y:fill(3,y),w:fill(3,w),g:fill(3,g), b:fill(3,b), r:fill(3,r), o:fill(3,o)}
+        self.__orient_dict = {UP:YELLOW, DOWN:WHITE, FRONT:BLUE, BACK:GREEN, LEFT:ORANGE, RIGHT:RED}
+        self.__color_dict = {YELLOW:face_init(YELLOW),WHITE:face_init(WHITE),GREEN:face_init(GREEN), BLUE:face_init(BLUE), RED:face_init(RED), ORANGE:face_init(ORANGE)}
         self.actions = []                    
     def __str__(self):
         '''
@@ -59,37 +60,38 @@ class Cube:
         return not self.__eq__(other)
 
     def __hash__(self):
-
-        color_map = {w: 163 ,y:113,g:151,b:173, r:193, o:239}
-        # color_map = {w: 2 ,y:4,g:8,b:16, r:32, o:64}
+        # color_map = {WHITE: 16300 ,YELLOW:11300,GREEN:15100,BLUE:17300, RED:19300, ORANGE:23900}
+        # # color_map = {WHITE: 2 ,YELLOW:4,GREEN:8,BLUE:16, RED:32, ORANGE:64}
 
         # h = 17
 
-        # for x, face in enumerate(list(self.color_dict.values())):
+        # for x, face in enumerate(list(self.__color_dict.values())):
             
         #     sub_hash = 7
         #     ctr = 1
         #     for i in range(3):
         #         for j in range(3):
-        #             sub_hash += ((i+1) * (j+9) * color_map[face[i][j]])
+        #             sub_hash *= (i+1)
+        #             sub_hash *= (j+9)
+
+        #             sub_hash += (103 *color_map[face[i][j]])
 
         #             # print("sub: ", sub_hash)
         #             ctr+=1
-        #     h *= ( (x+67) * sub_hash)
-        #     # print("h: ", h)
-        # # print("h: ", h)
-        # return h\
+        #     h += ( (28843*(x+1) )* sub_hash)
+
+        # return h
         s = ''.join(self.__str__().split())
         # print(s)
         h = hash(s)
         # print(h)
+        # print("here")
         return h
     
     def __reorient(self, up_face, front_face, left_face):
         ''' reorient the cube by assigning the given up, front, and left colors to self.orient_dict. 
         The other faces are determined from the given face colors.
         '''
-        
         back_face = get_opposite(front_face)
         down_face = get_opposite(up_face)
         right_face = get_opposite(left_face)
@@ -186,12 +188,13 @@ class Cube:
                 
 
         self.__color_dict[color] = [new_top, new_middle, new_bottom]
+        
            
     def __rot_U(self, prime):
-        top_front = self.__color_dict[self.__orient_dict[FRONT]][0].copy()
-        top_left = self.__color_dict[self.__orient_dict[LEFT]][0].copy()
-        top_back = self.__color_dict[self.__orient_dict[BACK]][0].copy()
-        top_right = self.__color_dict[self.__orient_dict[RIGHT]][0].copy()
+        top_front = self.__color_dict[self.__orient_dict[FRONT]][0]
+        top_left = self.__color_dict[self.__orient_dict[LEFT]][0]
+        top_back =  self.__color_dict[self.__orient_dict[BACK]][0]
+        top_right = self.__color_dict[self.__orient_dict[RIGHT]][0]
         
         if prime:        
             self.__color_dict[self.__orient_dict[FRONT]][0] = top_left
@@ -286,7 +289,7 @@ class Cube:
         elif action == CUBE_ROT_UP:
             self.__cube_rot_up()
         else:
-            raise Error
+            raise ValueError
 
     def get_face_from_color(self, color):
         return self.__color_dict[color]

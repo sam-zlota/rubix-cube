@@ -8,20 +8,20 @@ def get_random_seq():
     
     actions = [UP, UP_PRIME, FRONT,FRONT_PRIME,LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME, BACK, BACK_PRIME, DOWN, DOWN_PRIME]
     seq = []
-    for i in range(50):
+    for _ in range(50):
         seq.append(random.choice(actions))
     return seq
 
-def fill(n, color):
+def face_init(color):
     '''
     Creates a three dimensional array with the given color string. 
     Array represents the solved state of a rubik's cube.
     '''
     arr = []
     sub_arr = []
-
-    for i in range(n):
-        for j in range(n):
+    n = 3
+    for _ in range(n):
+        for _ in range(n):
             sub_arr.append(color)
         arr.append(sub_arr)
         sub_arr = []
@@ -33,18 +33,18 @@ def get_opposite(color):
     Returns the opposite color to the given one on a 
     Rubik's cube.
     '''
-    if color == y:
-        return w
-    if color == w:
-        return y
-    if color == r:
-        return o
-    if color == o:
-        return r
-    if color == b:
-        return g
-    if color == g:
-        return b
+    if color == YELLOW:
+        return WHITE
+    if color == WHITE:
+        return YELLOW
+    if color == RED:
+        return ORANGE
+    if color == ORANGE:
+        return RED
+    if color == BLUE:
+        return GREEN
+    if color == GREEN:
+        return BLUE
 
 def get_inverse(step):
     """
@@ -64,7 +64,7 @@ def get_inverse(step):
     elif step == CUBE_ROT_RIGHT:
         return CUBE_ROT_LEFT
     else:
-        raise Error 
+        raise ValueError 
 
 def get_inverse_sequence(steps):
     
@@ -111,4 +111,9 @@ def handle_inverses(steps):
         else:
             res.append(step)
     return res
+
+def clean(steps):
+    return handle_inverses(handle_repeats(steps))
+    # return handle_repeats(handle_inverses(steps))
+
 

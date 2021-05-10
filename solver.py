@@ -1,4 +1,4 @@
-from constants import up, down, left, right, front, back, y, w, r, o, g, b
+from constants import *
 
 class Solver:
     def __init__(self, cube):
@@ -21,25 +21,25 @@ class Solver:
         '''
         # search face
         while not self.check_daisy():
-            front_face = self.cube.get_face_from_orient(front)
-            top_face = self.cube.get_face_from_orient(up)
-            down_face = self.cube.get_face_from_orient(down)
+            front_face = self.cube.get_face_from_orient(FRONT)
+            top_face = self.cube.get_face_from_orient(UP)
+            down_face = self.cube.get_face_from_orient(DOWN)
             # check for edge already in top layer
             if top_face[2][1] == w: 
-                self.cube.apply_seq(["U"])
+                self.cube.apply_seq([UP])
             elif front_face[0][1] == w:
-                self.cube.apply_seq(["RR", "R'", "U", "F'"] )
+                self.cube.apply_seq([CUBE_ROT_RIGHT, RIGHT_PRIME, UP, FRONT_PRIME] )
             # middle left edge or  middle right edge
             elif front_face[1][0] == w or front_face[1][2] == w:
                 # rotate front not prime
-                self.cube.apply_seq(["F"])
+                self.cube.apply_seq([FRONT])
             # bottom edge or down face
             elif front_face[2][1] == w or down_face[0][1] == w:
                 # rotate front twice
-                self.cube.apply_seq(["F", "F"])
+                self.cube.apply_seq([FRONT, FRONT])
             else:
                 # rotate face and break from while loop
-                self.cube.apply_seq( ["LL"] )
+                self.cube.apply_seq( [CUBE_ROT_LEFT] )
 
     def check_daisy(self):
         '''
@@ -55,17 +55,17 @@ class Solver:
 
     def solve_white_cross(self):
         for i in range(4):
-            front_color = self.cube.get_color_from_orient(front)
-            front_face = self.cube.get_face_from_orient(front)
+            front_color = self.cube.get_color_from_orient(FRONT)
+            front_face = self.cube.get_face_from_orient(FRONT)
 
-            top_face = self.cube.get_face_from_orient(up)
+            top_face = self.cube.get_face_from_orient(UP)
 
             while front_face[0][1] != front_color or top_face[2][1] != w:
-                self.cube.apply_seq(["U"])
-                front_face = self.cube.get_face_from_orient(front)
-                top_face = self.cube.get_face_from_orient(up)
+                self.cube.apply_seq([UP])
+                front_face = self.cube.get_face_from_orient(FRONT)
+                top_face = self.cube.get_face_from_orient(UP)
         
-            self.cube.apply_seq(["F", "F", "LL"])
+            self.cube.apply_seq([FRONT, FRONT, CUBE_ROT_LEFT])
 
     def check_white_cross(self):
         white_face = self.cube.get_face_from_color(w)
@@ -116,16 +116,16 @@ class Solver:
             front_face, top_face, right_face, left_face, down_face = self.get_faces()
             #corner piece must be in bottom right corner of front face, so we can bring it up
             if front_face[2][2] == w:
-                self.cube.apply_seq(["D'", "R'", "D", "R"])
+                self.cube.apply_seq([DOWN_PRIME, RIGHT_PRIME, DOWN, RIGHT])
             if right_face[2][0] == w:
                 
-                self.cube.apply_seq(["LL", "D", "L", "D'", "L'", "RR"])
+                self.cube.apply_seq([CUBE_ROT_LEFT, DOWN, LEFT, DOWN_PRIME, LEFT_PRIME, CUBE_ROT_RIGHT])
             if down_face[0][2] == w:
-                self.cube.apply_seq(["F", "D'", "F'", "D", "D"])
+                self.cube.apply_seq([FRONT, DOWN_PRIME, FRONT_PRIME, DOWN, DOWN])
                 bring_corner_up()
 
         #rotate face up twice so that white cross is on up face
-        self.cube.apply_seq(["UU", "UU"])
+        self.cube.apply_seq([CUBE_ROT_UP, CUBE_ROT_UP])
         
         #for each corner
         while not self.check_white_corners():
@@ -136,12 +136,11 @@ class Solver:
             if top_face[2][2] == w or front_face[0][2] == w or right_face[0][0] == w:
                 if not right_corner:
                     #bring her down into bottom right corner
-                    self.cube.apply_seq(["R'", "D'", "R", "D"])
+                    self.cube.apply_seq([RIGHT_PRIME, DOWN_PRIME, RIGHT, DOWN])
                     move_corner_in_between()
                     bring_corner_up()
             else:
                 # check bottom layer
-
                 for _ in range(4):
                     front_face, top_face, right_face, left_face, down_face = self.get_faces()
                     if front_face[2][2] == w or right_face[2][0] == w or down_face[0][2] == w:
@@ -150,16 +149,15 @@ class Solver:
                         move_corner_in_between()
                         bring_corner_up()
                     else:
-                      self.cube.apply_seq(["D"])
+                      self.cube.apply_seq([DOWN])
      
-            self.cube.apply_seq(["LL"])
+            self.cube.apply_seq([CUBE_ROT_LEFT])
 
     def check_white_corners(self):
         '''
         Checks if step 3 is complete assuming orientation, white top, yellow bottom
         '''
-        # assert self.check_daisy() and self.check_white_cross()
-        # assert self.cube.orient_dict[up] == w and self.cube.orient_dict[down] == y
+
         white_face = self.cube.get_face_from_color(w)
         white_row_one = white_face[0][0] == w and white_face[0][1] == w and white_face[0][2] == w
         white_row_two = white_face[1][0] == w and white_face[1][1] == w and white_face[1][2] == w
@@ -175,7 +173,6 @@ class Solver:
 
             current_solved = current_face[0][0] == face and current_face[0][1] == face and current_face[0][2] == face and current_face[1][1] == face
             solved.append(current_solved)
-        # print(sum(solved))
         return sum(solved) == len(solved) and white_solved
 
     def solve_middle_layer(self):

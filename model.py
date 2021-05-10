@@ -1,4 +1,4 @@
-from constants import up, down, left, right, front, back, y, w, r, o, g, b
+from constants import *
 from utils import *
 
 '''
@@ -8,19 +8,19 @@ dictionary containing cube arrays with color as keys and array as values.
 '''
 class Cube:    
     def __init__(self):
-        self.__orient_dict = {up:y, down:w, front:b, back:g, left:o, right:r}
+        self.__orient_dict = {UP:y, DOWN:w, FRONT:b, BACK:g, LEFT:o, RIGHT:r}
         self.__color_dict = {y:fill(3,y),w:fill(3,w),g:fill(3,g), b:fill(3,b), r:fill(3,r), o:fill(3,o)}
         self.actions = []                    
     def __str__(self):
         '''
         Prints current state of rubik's cube
         ''' 
-        up_face = self.__color_dict[self.__orient_dict[up]]
-        down_face = self.__color_dict[self.__orient_dict[down]]
-        left_face = self.__color_dict[self.__orient_dict[left]]
-        right_face = self.__color_dict[self.__orient_dict[right]]
-        back_face = self.__color_dict[self.__orient_dict[back]]
-        front_face = self.__color_dict[self.__orient_dict[front]]
+        up_face = self.get_face_from_orient(UP)
+        down_face = self.get_face_from_orient(DOWN)
+        left_face = self.get_face_from_orient(LEFT)
+        right_face = self.get_face_from_orient(RIGHT)
+        back_face = self.get_face_from_orient(BACK)
+        front_face = self.get_face_from_orient(FRONT)
         
         out = ""
 
@@ -58,7 +58,6 @@ class Cube:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    # def __hash__(self):
     def __hash__(self):
 
         color_map = {w: 163 ,y:113,g:151,b:173, r:193, o:239}
@@ -95,77 +94,72 @@ class Cube:
         down_face = get_opposite(up_face)
         right_face = get_opposite(left_face)
         
-        self.__orient_dict[up] = up_face
-        self.__orient_dict[down] = down_face
-        self.__orient_dict[front] = front_face
-        self.__orient_dict[back] = back_face
-        self.__orient_dict[left] = left_face
-        self.__orient_dict[right] = right_face
+        self.__orient_dict[UP] = up_face
+        self.__orient_dict[DOWN] = down_face
+        self.__orient_dict[FRONT] = front_face
+        self.__orient_dict[BACK] = back_face
+        self.__orient_dict[LEFT] = left_face
+        self.__orient_dict[RIGHT] = right_face
     
     def __cube_rot_left(self):
         '''
         Rotates a rubik's cube left one face
         '''
         # reorient sides
-        self.__reorient(self.__orient_dict[up], self.__orient_dict[right], self.__orient_dict[front])
+        self.__reorient(self.__orient_dict[UP], self.__orient_dict[RIGHT], self.__orient_dict[FRONT])
         
         # rotate top clockwise
-        self.__face_rotate(self.__orient_dict[up], True)
+        self.__face_rotate(self.__orient_dict[UP], True)
         # rotate bottom counterclockwise
-        self.__face_rotate(self.__orient_dict[down], False)
-        return "LL"
+        self.__face_rotate(self.__orient_dict[DOWN], False)
 
     def __cube_rot_right(self):
         '''
         Rotates a rubik's cube right one face
         '''
         # reorient sides
-        self.__reorient(self.__orient_dict[up], self.__orient_dict[left], self.__orient_dict[back])
+        self.__reorient(self.__orient_dict[UP], self.__orient_dict[LEFT], self.__orient_dict[BACK])
 
         # rotate top counterclockwise
-        self.__face_rotate(self.__orient_dict[up], False)
+        self.__face_rotate(self.__orient_dict[UP], False)
         # rotate down clockwise
-        self.__face_rotate(self.__orient_dict[down], True)
-
-        return 'RR'
+        self.__face_rotate(self.__orient_dict[DOWN], True)
 
     def __cube_rot_up(self):
         '''
         Rotates a rubik's cube up one face
         '''
         # reorient sides
-        self.__reorient(self.__orient_dict[front], self.__orient_dict[down], self.__orient_dict[left])
+        self.__reorient(self.__orient_dict[FRONT], self.__orient_dict[DOWN], self.__orient_dict[LEFT])
 
         # rotate left counterclockwise
-        self.__face_rotate(self.__orient_dict[left], False)
+        self.__face_rotate(self.__orient_dict[LEFT], False)
         # rotate right clockwise
-        self.__face_rotate(self.__orient_dict[right], True)
+        self.__face_rotate(self.__orient_dict[RIGHT], True)
         # rotate down clockwise twice (180 degrees)
-        self.__face_rotate(self.__orient_dict[down], True)
-        self.__face_rotate(self.__orient_dict[down], True)
+        self.__face_rotate(self.__orient_dict[DOWN], True)
+        self.__face_rotate(self.__orient_dict[DOWN], True)
         # rotate back clockwise twice (180 degrees)
-        self.__face_rotate(self.__orient_dict[back], True)
-        self.__face_rotate(self.__orient_dict[back], True)
-        return "UU"
+        self.__face_rotate(self.__orient_dict[BACK], True)
+        self.__face_rotate(self.__orient_dict[BACK], True)
 
     def __cube_rot_down(self):
         '''
         Rotates a rubik's cube down one face
         '''
         # reorient sides
-        self.__reorient(self.__orient_dict[back], self.__orient_dict[up], self.__orient_dict[left])
+        self.__reorient(self.__orient_dict[BACK], self.__orient_dict[UP], self.__orient_dict[LEFT])
 
         # rotate left clockwise
-        self.__face_rotate(self.__orient_dict[left], True)
+        self.__face_rotate(self.__orient_dict[LEFT], True)
         # rotate right counterclockwise
-        self.__face_rotate(self.__orient_dict[right], False)
+        self.__face_rotate(self.__orient_dict[RIGHT], False)
         # rotate up clockwise twice (180 degrees)
-        self.__face_rotate(self.__orient_dict[up], True)
-        self.__face_rotate(self.__orient_dict[up], True)
+        self.__face_rotate(self.__orient_dict[UP], True)
+        self.__face_rotate(self.__orient_dict[UP], True)
         # rotate back clockwise twice (180 degrees)
-        self.__face_rotate(self.__orient_dict[back], True)
-        self.__face_rotate(self.__orient_dict[back], True)
-        return "DD"
+        self.__face_rotate(self.__orient_dict[BACK], True)
+        self.__face_rotate(self.__orient_dict[BACK], True)
         
     def __face_rotate(self, color, clockwise):
         ''' rotates a face 90 degrees clockwise or counterclockwise
@@ -194,23 +188,23 @@ class Cube:
         self.__color_dict[color] = [new_top, new_middle, new_bottom]
            
     def __rot_U(self, prime):
-        top_front = self.__color_dict[self.__orient_dict[front]][0].copy()
-        top_left = self.__color_dict[self.__orient_dict[left]][0].copy()
-        top_back = self.__color_dict[self.__orient_dict[back]][0].copy()
-        top_right = self.__color_dict[self.__orient_dict[right]][0].copy()
+        top_front = self.__color_dict[self.__orient_dict[FRONT]][0].copy()
+        top_left = self.__color_dict[self.__orient_dict[LEFT]][0].copy()
+        top_back = self.__color_dict[self.__orient_dict[BACK]][0].copy()
+        top_right = self.__color_dict[self.__orient_dict[RIGHT]][0].copy()
         
         if prime:        
-            self.__color_dict[self.__orient_dict[front]][0] = top_left
-            self.__color_dict[self.__orient_dict[left]][0] = top_back
-            self.__color_dict[self.__orient_dict[back]][0] = top_right
-            self.__color_dict[self.__orient_dict[right]][0] = top_front
-            self.__face_rotate(self.__orient_dict[up], False)
+            self.__color_dict[self.__orient_dict[FRONT]][0] = top_left
+            self.__color_dict[self.__orient_dict[LEFT]][0] = top_back
+            self.__color_dict[self.__orient_dict[BACK]][0] = top_right
+            self.__color_dict[self.__orient_dict[RIGHT]][0] = top_front
+            self.__face_rotate(self.__orient_dict[UP], False)
         else:
-            self.__color_dict[self.__orient_dict[front]][0] = top_right
-            self.__color_dict[self.__orient_dict[left]][0] = top_front
-            self.__color_dict[self.__orient_dict[back]][0] = top_left
-            self.__color_dict[self.__orient_dict[right]][0] = top_back
-            self.__face_rotate(self.__orient_dict[up], True)
+            self.__color_dict[self.__orient_dict[FRONT]][0] = top_right
+            self.__color_dict[self.__orient_dict[LEFT]][0] = top_front
+            self.__color_dict[self.__orient_dict[BACK]][0] = top_left
+            self.__color_dict[self.__orient_dict[RIGHT]][0] = top_back
+            self.__face_rotate(self.__orient_dict[UP], True)
     
     def __rot_D(self, prime):
         self.__cube_rot_up()
@@ -244,58 +238,52 @@ class Cube:
         self.__cube_rot_up()
 
     def __rotate(self, direction, prime):
-        if direction == up:
+        if direction == UP:
             self.__rot_U(prime)
-            # if prime:
-            #     return "U'"
-            # else:
-            #     return "U"
-        if direction == down:
+        if direction == DOWN:
             self.__rot_D(prime)
-            # if prime:
-            #     return "D'"
-            # else:
-            #     return "D"
-        if direction == left:
+        if direction == LEFT:
             self.__rot_L(prime)
-            # if prime:
-            #     return "L'"
-            # else:
-            #     return "L"
-        if direction == right:
+        if direction == RIGHT:
             self.__rot_R(prime)
-            # if prime:
-            #     return "R'"
-            # else:
-            #     return "R"
-        if direction == front:
+        if direction == FRONT:
             self.__rot_F(prime)
-            # if prime:
-            #     return "F'"
-            # else:
-            #     return "F"
-        if direction == back:
+        if direction == BACK:
             self.__rot_B(prime)
-            # if prime:
-            #     return "B'"
-            # else:
-            #     return "B"
 
     def __apply(self, action):
         self.actions.append(action)
-        if len(action) == 1:
-            self.__rotate(action[0], False)
-        elif action[1] == "'":
-            #U' etc
-            self.__rotate(action[0], True)
-        #cube rots
-        elif action == "LL":
+        if action == LEFT:
+            self.__rot_L(False)
+        elif action == LEFT_PRIME:
+            self.__rot_L(True)
+        elif action == RIGHT:
+            self.__rot_R(False)
+        elif action == RIGHT_PRIME:
+            self.__rot_R(True)
+        elif action == FRONT:
+            self.__rot_F(False)
+        elif action == FRONT_PRIME:
+            self.__rot_F(True)
+        elif action == BACK:
+            self.__rot_B(False)
+        elif action == BACK_PRIME:
+            self.__rot_B(True)
+        elif action == UP:
+            self.__rot_U(False)
+        elif action == UP_PRIME:
+            self.__rot_U(True)
+        elif action == DOWN:
+            self.__rot_D(False)
+        elif action == DOWN_PRIME:
+            self.__rot_D(True)
+        elif action == CUBE_ROT_LEFT:
             self.__cube_rot_left()
-        elif action == "RR":
+        elif action == CUBE_ROT_RIGHT:
             self.__cube_rot_right()
-        elif action == "DD":
+        elif action == CUBE_ROT_DOWN:
             self.__cube_rot_down()
-        elif action == "UU":
+        elif action == CUBE_ROT_UP:
             self.__cube_rot_up()
         else:
             raise Error

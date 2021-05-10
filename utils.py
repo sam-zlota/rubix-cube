@@ -1,5 +1,4 @@
-from constants import up, down, left, right, front, back, y, w, r, o, g, b
-
+from constants import *
 import random
 
 def get_random_seq():
@@ -7,7 +6,7 @@ def get_random_seq():
     Returns a mixed up rubik's cube sequence
     '''
     
-    actions = ["U", "U'", "F","F'","L", "L'", "R", "R'", "B", "B'", "D", "D'"]
+    actions = [UP, UP_PRIME, FRONT,FRONT_PRIME,LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME, BACK, BACK_PRIME, DOWN, DOWN_PRIME]
     seq = []
     for i in range(50):
         seq.append(random.choice(actions))
@@ -50,20 +49,20 @@ def get_opposite(color):
 def get_inverse(step):
     """
         Returns the inverse move for the given step. 
-        (Ex.) get_inverse("U") ->  "U'"
+        (Ex.) get_inverse(UP) ->  UP_PRIME
     """
     if len(step) == 1:
         return step + "'"
     elif step[1] == "'":
         return step[0]
-    elif step == "UU":
-        return "DD"
-    elif step == "DD":
-        return "UU"
-    elif step == "LL":
-        return "RR"
-    elif step == "RR":
-        return "LL"
+    elif step == CUBE_ROT_UP:
+        return CUBE_ROT_DOWN
+    elif step == CUBE_ROT_DOWN:
+        return CUBE_ROT_UP
+    elif step == CUBE_ROT_LEFT:
+        return CUBE_ROT_RIGHT
+    elif step == CUBE_ROT_RIGHT:
+        return CUBE_ROT_LEFT
     else:
         raise Error 
 
@@ -76,51 +75,40 @@ def get_inverse_sequence(steps):
     return res
 
 def handle_repeats(steps):
-    """
-        If the steps to a solution have consecutive repeats of the same move, then this function
-        will filter them out appropriately.
+    res = []
+    curr = steps[0]
+    ctr = 1
+    for step in steps[1:]:
+        if step == curr:
+            ctr+=1
+        else:
+            repeats = ctr % 4
+            if repeats == 1:
+                res.append(curr)
+            if repeats == 2:
+                res.append(curr)
+                res.append(curr)
+            if repeats == 3:
+                res.append(get_inverse(curr))
+            curr = step
+            ctr = 1
+    repeats = ctr % 4
+    if repeats == 1:
+        res.append(curr)
+    if repeats == 2:
+        res.append(curr)
+        res.append(curr)
+    if repeats == 3:
+        res.append(get_inverse(curr))
+    return res
 
-        (Ex.)
-        "L" -> "L"
-        "L L" -> "L L"
-        "L L L" -> "L'"
-        "L L L L" -> ""
-    """
-    # steps = steps.split()
-    soln = []
-
-    if len(steps) == 1:
-        return " ".join(steps)
-    if len(steps) > 1 and steps[1] != steps[0]:
-        soln.append(steps[0])
-
-    repeats = 1
-
-    # if len(steps) > 1 and steps[1] == steps[0]:
-    #     repeats = 2
-
-    i = 1
-    while i < len(steps):
-        if steps[i] != steps[i-1]:
-            soln.append(steps[i])
-            i+=1
-            continue
-    
-        while i < len(steps) and steps[i] == steps[i-1]:
-            repeats+=1
-            i+=1  
-        repeats = repeats % 4
-        # soln = soln[:-1]
-        if repeats == 1:
-            soln.append(steps[i - 1])
-        if repeats == 2:
-            soln.append(steps[i-1])
-            soln.append(steps[i-1])
-        if repeats == 3:
-            soln.append(get_inverse(steps[i-1]))
-        repeats = 1 
-    return soln
-
-
-
+def handle_inverses(steps):
+    res = []
+    res.append(steps[0])
+    for step in steps[1:]:
+        if len(res) > 0 and step == get_inverse(res[-1:][0]):
+            res = res[:-1]
+        else:
+            res.append(step)
+    return res
 

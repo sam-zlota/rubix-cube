@@ -67,7 +67,11 @@ def get_inverse(step):
         raise ValueError 
 
 def get_inverse_sequence(steps):
-    
+    """
+        Returns the sequence of moves that will undo the specified sequence of moves.
+        
+        ["U'", "L", "F"] ==> ["F'", "L'", "U"]
+    """
     res = []
     for step in steps:
         res.append(get_inverse(step))
@@ -75,6 +79,18 @@ def get_inverse_sequence(steps):
     return res
 
 def handle_repeats(steps):
+    """
+        Returns the sequence of moves with repeat moves handled in the following manner.
+
+        Where x is any move:
+            [x] ==> [x]
+            [x, x] ==> [x, x]
+            [x, x, x] ==> [x']
+            [x, x, x, x] ==> []
+        This applies to repeated sequences > 4, whre only the last n % 4 moves are considered for a
+        sequence of length n.
+        
+    """
     res = []
     curr = steps[0]
     ctr = 1
@@ -103,6 +119,11 @@ def handle_repeats(steps):
     return res
 
 def handle_inverses(steps):
+    """
+        Handles succesive commutative moves by removing them.
+
+        ["U", "U'"] ==> []
+    """
     res = []
     res.append(steps[0])
     for step in steps[1:]:
@@ -113,7 +134,9 @@ def handle_inverses(steps):
     return res
 
 def clean(steps):
+    """
+        Cleans the sequence of steps by handling repeats and commutative moves.
+    """
     return handle_inverses(handle_repeats(steps))
-    # return handle_repeats(handle_inverses(steps))
 
 

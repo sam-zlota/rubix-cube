@@ -41,7 +41,6 @@ class Cube:
             out += "         " + down_face[i][0] + "  " + down_face[i][1] + "  " + down_face[i][2] + "            " + "\n"
 
         return out
-
     def __eq__(self, other):
         if not isinstance(other, Cube):
             return False
@@ -55,39 +54,11 @@ class Cube:
                         face_equal = face_equal and (face[i][j] == other_face[i][j])
                 equal = equal and face_equal      
             return equal
-
     def __ne__(self, other):
         return not self.__eq__(other)
-
     def __hash__(self):
-        # color_map = {WHITE: 16300 ,YELLOW:11300,GREEN:15100,BLUE:17300, RED:19300, ORANGE:23900}
-        # # color_map = {WHITE: 2 ,YELLOW:4,GREEN:8,BLUE:16, RED:32, ORANGE:64}
-
-        # h = 17
-
-        # for x, face in enumerate(list(self.__color_dict.values())):
-            
-        #     sub_hash = 7
-        #     ctr = 1
-        #     for i in range(3):
-        #         for j in range(3):
-        #             sub_hash *= (i+1)
-        #             sub_hash *= (j+9)
-
-        #             sub_hash += (103 *color_map[face[i][j]])
-
-        #             # print("sub: ", sub_hash)
-        #             ctr+=1
-        #     h += ( (28843*(x+1) )* sub_hash)
-
-        # return h
         s = ''.join(self.__str__().split())
-        # print(s)
-        h = hash(s)
-        # print(h)
-        # print("here")
-        return h
-    
+        return hash(s)
     def __reorient(self, up_face, front_face, left_face):
         ''' reorient the cube by assigning the given up, front, and left colors to self.orient_dict. 
         The other faces are determined from the given face colors.
@@ -102,7 +73,6 @@ class Cube:
         self.__orient_dict[BACK] = back_face
         self.__orient_dict[LEFT] = left_face
         self.__orient_dict[RIGHT] = right_face
-    
     def __cube_rot_left(self):
         '''
         Rotates a rubik's cube left one face
@@ -188,9 +158,11 @@ class Cube:
                 
 
         self.__color_dict[color] = [new_top, new_middle, new_bottom]
-        
-           
+                 
     def __rot_U(self, prime):
+        """
+            Rotates the top layer
+        """
         top_front = self.__color_dict[self.__orient_dict[FRONT]][0]
         top_left = self.__color_dict[self.__orient_dict[LEFT]][0]
         top_back =  self.__color_dict[self.__orient_dict[BACK]][0]
@@ -210,6 +182,9 @@ class Cube:
             self.__face_rotate(self.__orient_dict[UP], True)
     
     def __rot_D(self, prime):
+        """
+            Rotates the bottom layer
+        """
         self.__cube_rot_up()
         self.__cube_rot_up()
         self.__rot_U(prime)
@@ -217,6 +192,9 @@ class Cube:
         self.__cube_rot_down()
 
     def __rot_L(self, prime):
+        """
+            Rotates the left layer
+        """
         self.__cube_rot_right()
         self.__cube_rot_up()
         self.__rot_U(prime)
@@ -224,6 +202,9 @@ class Cube:
         self.__cube_rot_left()
         
     def __rot_R(self, prime):
+        """
+            Rotates the right layer
+        """
         self.__cube_rot_left()
         self.__cube_rot_up()
         self.__rot_U(prime)
@@ -231,31 +212,25 @@ class Cube:
         self.__cube_rot_right()
         
     def __rot_F(self, prime):
+        """
+            Rotates the front layer
+        """
         self.__cube_rot_up()
         self.__rot_U(prime)
         self.__cube_rot_down()
         
     def __rot_B(self, prime):
+        """
+            Rotates the back layer
+        """
         self.__cube_rot_down()
         self.__rot_U(prime)
         self.__cube_rot_up()
 
-    def __rotate(self, direction, prime):
-        if direction == UP:
-            self.__rot_U(prime)
-        if direction == DOWN:
-            self.__rot_D(prime)
-        if direction == LEFT:
-            self.__rot_L(prime)
-        if direction == RIGHT:
-            self.__rot_R(prime)
-        if direction == FRONT:
-            self.__rot_F(prime)
-        if direction == BACK:
-            self.__rot_B(prime)
-
     def __apply(self, action):
-        self.actions.append(action)
+        """
+            Applies the specified action to the cube
+        """  
         if action == LEFT:
             self.__rot_L(False)
         elif action == LEFT_PRIME:
@@ -290,20 +265,36 @@ class Cube:
             self.__cube_rot_up()
         else:
             raise ValueError
+        self.actions.append(action)
 
     def get_face_from_color(self, color):
+        """
+            Returns the 3x3 array face where the center square is of the specified color
+        """
         return self.__color_dict[color]
 
     def get_color_from_orient(self, orient):
+        """
+            Returns the color of the specified face orientation.
+        """
         return self.__orient_dict[orient] 
 
     def get_face_from_orient(self, orient):
+        """
+            Returns the face of the specified face orientation.
+        """
         return self.__color_dict[self.__orient_dict[orient]]
 
     def apply_seq(self, seq):
+        """
+            Applies the sequence of actions to the cube.
+        """
         for action in seq:
             self.__apply(action)
 
     def undo(self):
+        """
+            Undoes the most recent move. 
+        """
         assert len(self.actions) > 0
         self.__apply(get_inverse(self.actions[-1:]))

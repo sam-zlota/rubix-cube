@@ -12,8 +12,8 @@ def get_mixed_cube():
     c.apply_seq(seq)
     return c
 
-def test_solve_daisy():
 
+def test_solve_daisy():
     for i in range(10):
         print("running test: ", i)
         c = get_mixed_cube()
@@ -26,8 +26,8 @@ def test_solve_daisy():
         assert s.check_daisy()
         print(c.print_v2())
 
-    
     print("test passed!")
+
 
 def test_solve_white_cross():
     start_time = time.time()
@@ -40,9 +40,9 @@ def test_solve_white_cross():
         if i % 100 == 0:
             print(i, " complete")
 
-    
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
+
 
 def test_solve_white_corners():
     start_time = time.time()
@@ -67,17 +67,17 @@ def test_solve_white_corners():
             ctr = 0
             for act in sequence:
                 if len(act) > 1 and act[1] == act[0]:
-                    ctr+=1
+                    ctr += 1
             print("found cube rots: ", ctr)
             print("diff: ", len(sequence) - len(concise))
             print(s.cube)
 
             print(i, " complete")
 
-    
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
-    
+
+
 def stress_test():
     start_time = time.time()
     for i in range(5000):
@@ -91,40 +91,41 @@ def stress_test():
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
 
+
 def test_solve_middle_layer():
     start_time = time.time()
-    diff_sum =diff_prct= 0
-    n = 500
+    diff_sum = diff_prct = 0
+    n = 100
     for i in range(n + 1):
         c = get_mixed_cube()
-        c.apply_seq(get_random_seq())
+
         s = Solver(c)
         assert not s.check_middle_layer()
         sequence = s.solve()
         assert s.check_middle_layer()
-        cleaned = clean(sequence)
-        diff_sum+= (len(sequence) - len(cleaned))
-        diff_prct+= (1 - len(cleaned)/len(sequence))
+        # cleaned = clean(sequence)
+        # diff_sum += (len(sequence) - len(cleaned))
+        # diff_prct += (1 - len(cleaned) / len(sequence))
 
-        b = Cube()
-        b.apply_seq(sequence)
-        z = Cube()
-        z.apply_seq(cleaned)
-        assert b == z
-        assert hash(b) == hash(z) 
-        if i % (n/5) == 0:
-            
+        # b = Cube()
+        # b.apply_seq(sequence)
+        # z = Cube()
+        # z.apply_seq(cleaned)
+        # assert b == z
+        # assert hash(b) == hash(z)
+        if i % (n / 5) == 0:
             print(len(sequence), sequence)
-            print(len(cleaned), cleaned)
+            # print(len(cleaned), cleaned)
             print(s.cube)
 
             print(i, " complete")
 
-    print("average diff:", diff_sum/n)
-    print("average percent diff:", diff_prct/n)
+    print("average diff:", diff_sum / n)
+    print("average percent diff:", diff_prct / n)
 
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
+
 
 def test_hash():
     start = time.time()
@@ -139,7 +140,8 @@ def test_hash():
             print(i, "complete")
             print(h)
     print("Finished!")
-    print(iters, "iters\n ", "time: ", (time.time() - start), "s") 
+    print(iters, "iters\n ", "time: ", (time.time() - start), "s")
+
 
 if __name__ == "__main__":
     test_solve_middle_layer()

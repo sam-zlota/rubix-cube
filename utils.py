@@ -8,7 +8,7 @@ def get_random_seq():
     
     actions = [UP, UP_PRIME, FRONT,FRONT_PRIME,LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME, BACK, BACK_PRIME, DOWN, DOWN_PRIME]
     seq = []
-    for _ in range(50):
+    for _ in range(100):
         seq.append(random.choice(actions))
     return seq
 

@@ -13,6 +13,8 @@ class Solver:
         self.solve_white_cross()
         self.solve_white_corners()
         self.solve_middle_layer()
+        self.solve_yellow_cross()
+        self.solve_yellow_corners()
 
         return self.cube.actions
 
@@ -286,3 +288,73 @@ class Solver:
                         other_solved = False
 
         return white_complete and other_solved
+
+    def solve_yellow_cross(self):
+
+        while not self.check_yellow_cross():
+            yellow_face = self.cube.get_face_from_color(YELLOW)
+            
+            top_edge = yellow_face[0][1] == YELLOW
+            right_edge = yellow_face[1][2] == YELLOW
+            left_edge = yellow_face[1][0] == YELLOW
+            bottom_edge = yellow_face[2][1] == YELLOW
+
+            if top_edge and bottom_edge:
+                self.cube.apply_seq([UP])
+            elif top_edge and right_edge:
+                self.cube.apply_seq([UP_PRIME])
+            elif right_edge and bottom_edge:
+                self.cube.apply_seq([UP_PRIME, UP_PRIME])
+            elif left_edge and bottom_edge:
+                self.cube.apply_seq([UP])
+
+            self.cube.apply_seq([FRONT, UP, RIGHT, UP_PRIME, RIGHT_PRIME, FRONT_PRIME])
+
+    def check_yellow_cross(self):
+        yellow_face = self.cube.get_face_from_color(YELLOW)
+
+        top_edge = yellow_face[0][1] == YELLOW
+        right_edge = yellow_face[1][2] == YELLOW
+        left_edge = yellow_face[1][0] == YELLOW
+        bottom_edge = yellow_face[2][1] == YELLOW
+
+        return top_edge and right_edge and left_edge and bottom_edge
+
+    def solve_yellow_corners(self):
+  
+        while not self.check_yellow_corners():
+            yellow_face = self.cube.get_face_from_color(YELLOW)
+
+            top_left = yellow_face[0][0] == YELLOW
+            top_right = yellow_face[0][2] == YELLOW
+            bottom_left = yellow_face[2][0] == YELLOW
+            bottom_right = yellow_face[2][2] == YELLOW
+
+            yellow_count = top_right + top_left + bottom_right + bottom_left
+            if yellow_count == 0:
+                while not self.cube.get_face_from_orient(LEFT)[0][2] == YELLOW:
+                    self.cube.apply_seq([UP])
+            if yellow_count == 1:
+                if top_left:
+                    self.cube.apply_seq([UP_PRIME])
+                if top_right:
+                    self.cube.apply_seq([UP, UP])
+                if bottom_right:
+                    self.cube.apply_seq([UP])
+            if yellow_count == 2:
+                while not self.cube.get_face_from_orient(FRONT)[0][0] == YELLOW:
+                    self.cube.apply_seq([UP])
+
+            self.cube.apply_seq([RIGHT, UP, RIGHT_PRIME, UP, RIGHT, UP, UP, RIGHT_PRIME])
+
+
+
+    def check_yellow_corners(self):
+        yellow_face = self.cube.get_face_from_color(YELLOW)
+
+        top_left = yellow_face[0][0] == YELLOW
+        top_right = yellow_face[0][2] == YELLOW
+        bottom_left = yellow_face[2][0] == YELLOW
+        bottom_right = yellow_face[2][2] == YELLOW
+
+        return top_left and top_right and bottom_left and bottom_right

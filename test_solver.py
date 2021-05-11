@@ -95,7 +95,7 @@ def stress_test():
 def test_solve_middle_layer():
     start_time = time.time()
     diff_sum = diff_prct = 0
-    n = 100
+    n = 10000
     for i in range(n + 1):
         c = get_mixed_cube()
 
@@ -129,7 +129,7 @@ def test_solve_middle_layer():
 
 def test_hash():
     start = time.time()
-    iters = 10_000
+    iters = 100_000
     samp = iters / 10
     for i in range(iters):
         c = Cube()
@@ -142,6 +142,32 @@ def test_hash():
     print("Finished!")
     print(iters, "iters\n ", "time: ", (time.time() - start), "s")
 
+def test_solve_yellow_cross():
+    start = time.time()
+    for i in range(100):
+        c = get_mixed_cube()
+        s = Solver(c)
+        assert not s.check_yellow_cross()
+        s.solve()
+        assert s.check_yellow_cross()
+        if i % 20 == 0:
+            print(s.cube)
+    print("Success!")
+    print("time: ", (time.time() - start), "s")
+
+
+def test_solve_yellow_corners():
+    start = time.time()
+    for i in range(100):
+        c = get_mixed_cube()
+        s = Solver(c)
+        assert not s.check_yellow_corners()
+        s.solve()
+        assert s.check_yellow_corners()
+        if i % 20 == 0:
+            print(s.cube)
+    print("Success!")
+    print("time: ", (time.time() - start), "s")
 
 if __name__ == "__main__":
-    test_solve_middle_layer()
+    test_solve_yellow_corners()

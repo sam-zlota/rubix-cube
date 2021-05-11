@@ -419,10 +419,10 @@ class Solver:
             #         if left_side_match and right_side_match:
             #             return True, orient
             #     return False, None 
-            blue_face = self.cube.get_face_from_color(BLUE)
-            red_face = self.cube.get_face_from_color(RED)
-            green_face = self.cube.get_face_from_color(GREEN)
-            orange_face = self.cube.get_face_from_color(ORANGE)
+            front_face = self.cube.get_face_from_color(FRONT)
+            left_face = self.cube.get_face_from_color(LEFT)
+            right_face = self.cube.get_face_from_color(RIGHT)
+            back_face = self.cube.get_face_from_color(BACK)
 
             def check_back_corners(front_face, left_face, right_face, front_color, left_color, right_color):
                 front_left = front_face[0][0] == front_color 
@@ -459,7 +459,13 @@ class Solver:
                 return back_corners_match and front_corners_match
 
             def adjacent_corners():
-                
+                front_color = self.cube.get_color_from_orient(FRONT)
+                left_color = self.cube.get_color_from_orient(LEFT)
+                right_color = self.cube.get_color_from_orient(RIGHT)
+                back_color = self.cube.get_color_from_orient(BACK)
+                back_corners_match = check_back_corners(front_face, left_face, right_face, front_color, left_color, right_color)
+
+                front_corners_match = check_front_corners(back_face, right_face, left_face, back_color, right_color, left_color)
 
 
             orange_matching_left = orange_face[0][0] == ORANGE and green_face[0][2] == GREEN 

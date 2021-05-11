@@ -15,6 +15,8 @@ class Solver:
         self.solve_middle_layer()
         self.solve_yellow_cross()
         self.solve_yellow_corners()
+        self.solve_position_yellow_corners()
+        self.solve_final_stage()
 
         return self.cube.actions
 
@@ -495,3 +497,32 @@ class Solver:
         green_red_corner = green_face[0][0] == GREEN and red_face[0][2] == RED 
 
         return blue_red_corner and blue_orange_corner and green_orange_corner and green_red_corner 
+
+
+    def solve_final_stage(self):
+
+        def put_solved_face_on_back():
+            for _ in range(4):
+                back_face = self.cube.get_face_from_orient(BACK)
+                top_layer = back_face[0]
+                if top_layer[0] == top_layer[1] and top_layer[1] == top_layer[2]:
+                    break
+                else:
+                    self.cube.apply_seq(CUBE_ROT_LEFT)
+
+        seq = [FRONT, FRONT, UP, LEFT, RIGHT_PRIME, FRONT, FRONT, LEFT_PRIME, RIGHT, UP, FRONT,FRONT]
+
+        while not check_final_step():
+            put_solved_face_on_back()
+            self.cube.apply_seq(seq)
+    
+    def check_final_step(self):
+        colors = [RED, ORANGE, GREEN, BLUE]
+        final_stage_solved = True
+        for color in color:
+            face = self.cube.get_face_from_color(color)
+            top_layer = face[0]
+            face_solved = top_layer[0] == top_layer[1] and top_layer[1] == top_layer[2]
+            final_stage_solved = final_stage_solved and face_solved
+
+        return final_stage_solved

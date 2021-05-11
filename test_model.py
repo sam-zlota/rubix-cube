@@ -1,7 +1,7 @@
 from constants import *
 from utils import *
 from solver import Solver
-import random
+from model import Cube
 
 test_w = [['b', 'o', 'r'], ['r', 'w', 'w'], ['g', 'y', 'y']]
 test_y = [['w', 'y', 'b'], ['o', 'y', 'b'], ['r', 'r', 'r']]
@@ -123,3 +123,13 @@ def test_rotate(direction, prime):
 
     # print new state
     print(c.print_v2())
+
+def test_get_orient_from_color():
+    c = Cube()
+
+    print(c) 
+
+    print(c.get_orient_from_color(WHITE))
+
+if __name__ == "__main__":
+    test_get_orient_from_color()

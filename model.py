@@ -292,6 +292,11 @@ class Cube:
         """
         return self.__color_dict[self.__orient_dict[orient]]
 
+    def get_orient_from_color(self, color):
+        for key in self.__orient_dict.keys():
+            if self.__orient_dict[key] == color:
+                return key
+
     def apply_seq(self, seq):
         """
             Applies the sequence of actions to the cube.

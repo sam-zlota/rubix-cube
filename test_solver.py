@@ -171,12 +171,13 @@ def test_solve_yellow_corners():
 
 def test_solve_position_yellow_corners():
     start = time.time()
-    for i in range(100):
+    for i in range(1):
         c = get_mixed_cube()
         s = Solver(c)
         assert not s.check_position_yellow_corners()
         s.solve()
         assert s.check_position_yellow_corners()
+        print(s.cube)
         if i % 20 == 0:
             print(s.cube)
     print("Success!")
@@ -197,4 +198,4 @@ def test_solve_cube():
     print("time: ", (time.time() - start), "s")
 
 if __name__ == "__main__":
-    test_solve_cube()
+    test_solve_position_yellow_corners()

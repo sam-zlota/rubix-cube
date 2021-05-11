@@ -11,7 +11,8 @@ class Cube:
     def __init__(self):
         self.__orient_dict = {UP:YELLOW, DOWN:WHITE, FRONT:BLUE, BACK:GREEN, LEFT:ORANGE, RIGHT:RED}
         self.__color_dict = {YELLOW:face_init(YELLOW),WHITE:face_init(WHITE),GREEN:face_init(GREEN), BLUE:face_init(BLUE), RED:face_init(RED), ORANGE:face_init(ORANGE)}
-        self.actions = []                    
+        self.actions = []  
+
     def __str__(self):
         '''
         Prints current state of rubik's cube
@@ -41,6 +42,7 @@ class Cube:
             out += "         " + down_face[i][0] + "  " + down_face[i][1] + "  " + down_face[i][2] + "            " + "\n"
 
         return out
+
     def __eq__(self, other):
         if not isinstance(other, Cube):
             return False
@@ -54,11 +56,14 @@ class Cube:
                         face_equal = face_equal and (face[i][j] == other_face[i][j])
                 equal = equal and face_equal      
             return equal
+
     def __ne__(self, other):
         return not self.__eq__(other)
+
     def __hash__(self):
         s = ''.join(self.__str__().split())
         return hash(s)
+
     def __reorient(self, up_face, front_face, left_face):
         ''' reorient the cube by assigning the given up, front, and left colors to self.orient_dict. 
         The other faces are determined from the given face colors.
@@ -73,6 +78,7 @@ class Cube:
         self.__orient_dict[BACK] = back_face
         self.__orient_dict[LEFT] = left_face
         self.__orient_dict[RIGHT] = right_face
+        
     def __cube_rot_left(self):
         '''
         Rotates a rubik's cube left one face

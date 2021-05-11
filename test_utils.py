@@ -41,7 +41,6 @@ def test_cube_equal():
     print("Success!")
     print("time: ", (time.time() - start_time)*1000, "ms")
 
-
 def test_handle_inverses():
     start_time = time.time()
 

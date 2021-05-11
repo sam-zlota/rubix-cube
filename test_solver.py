@@ -141,6 +141,5 @@ def test_hash():
     print("Finished!")
     print(iters, "iters\n ", "time: ", (time.time() - start), "s") 
 
-
 if __name__ == "__main__":
     test_solve_middle_layer()

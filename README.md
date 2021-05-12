@@ -6,7 +6,7 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
 ### More to come:
 - JS web app with GUI cube editor
 - photo integration (CV pipeline to accept 6 2D images as input)
-- implement AI solving methods to reduce number of moves (inspiration: [here](https://github.com/benbotto/rubiks-cube-cracker))
+- implement AI solving methods to reduce number of moves (inspiration: [here](https://github.com/benbotto/rubiks-cube-cracker)). Because these have been implemented before we would look to improve their upper bounds both in the quarter-turn metric and time.
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
     - ~6x less moves 
     - \>12,000x slower (4 orders of magnitude)

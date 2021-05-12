@@ -8,7 +8,7 @@ Here are statistics for 10,000 cubes:
 
 
 
-
+<img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" alt="drawing" width="200"/>
 
 
 

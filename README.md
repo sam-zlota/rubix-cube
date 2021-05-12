@@ -1,10 +1,10 @@
 # rubix-cube
 
 This project implements the standard solving procedure for a 3x3 rubix cube as specified [here](https://www.rubiks.com/media/guides/RBL_solve_guide_CUBE_US_5.375x8.375in_AW_27Feb2020_VISUAL.pdf).
-It can currently solve 10,000 cubes in just over 30 seconds. It takes on average 3.3 ms to solve a single cube with a standard deviation of 0.5ms. It takes on average 285 moves to solve a single cube with a standard deviation of 30.
+It can currently solve 10,000 cubes in just over 30 seconds. It takes on average 3.3 ms to solve a single cube. It takes on average 245 moves to solve a single cube.
 
 Here are statistics for 10,000 cubes:
-![image](https://user-images.githubusercontent.com/57266808/118034812-67720c00-b338-11eb-87e7-b8568f601ffd.png)
+![image](https://user-images.githubusercontent.com/57266808/118035588-67bed700-b339-11eb-8956-7d19b8f974d3.png)
 
 
 

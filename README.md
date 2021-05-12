@@ -4,9 +4,9 @@ This project implements the standard solving procedure for a 3x3 rubix cube as s
 It can currently solve 10,000 cubes in just over 30 seconds. It takes less than **5ms** to solve a single cube. It takes roughly 275 +/- 50 moves  to solve a single cube.
 
 ### More to come:
-- JS web app with GUI cube editor
-- photo integration (CV pipeline to accept 6 2D images as input)
-- implement AI solving methods to reduce number of moves. Because these have been implemented [before](https://github.com/benbotto/rubiks-cube-cracker)), we look to improve their upper bounds both in the quarter-turn metric and time.
+- JS web app with GUI cube editor.
+- photo integration (CV pipeline to accept 6 2D images as input).
+- implement AI solving methods. Because these have been implemented [before](https://github.com/benbotto/rubiks-cube-cracker)), we look to improve their upper bounds both in the quarter-turn metric and time.
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
     - ~6x less moves 
     - \>12,000x slower (4 orders of magnitude)

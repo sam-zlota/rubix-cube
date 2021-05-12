@@ -6,7 +6,7 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes roughly 3.
 Here are statistics for 10,000 cubes:
 
 
-<img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" width="700" height="1000"/>
+<img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" width="666" height="1000"/>
 
 
 

@@ -1,3 +1,4 @@
+from model import Cube
 from constants import *
 
 
@@ -16,7 +17,7 @@ class Solver:
         self.solve_yellow_cross()
         self.solve_yellow_corners()
         self.solve_position_yellow_corners()
-        #self.solve_final_stage()
+        self.solve_final_stage()
 
         return self.cube.actions
 
@@ -349,8 +350,6 @@ class Solver:
 
             self.cube.apply_seq([RIGHT, UP, RIGHT_PRIME, UP, RIGHT, UP, UP, RIGHT_PRIME])
 
-
-
     def check_yellow_corners(self):
         yellow_face = self.cube.get_face_from_color(YELLOW)
 
@@ -361,150 +360,27 @@ class Solver:
 
         return top_left and top_right and bottom_left and bottom_right
 
-
+    
     def solve_position_yellow_corners(self):
+        seq = [RIGHT_PRIME, FRONT, RIGHT_PRIME, BACK, BACK, RIGHT, FRONT_PRIME, RIGHT_PRIME, BACK, BACK, RIGHT, RIGHT, UP_PRIME]
 
         while not self.check_position_yellow_corners():
-           
-            front_face = self.cube.get_face_from_orient(FRONT)
-            left_face = self.cube.get_face_from_orient(LEFT)
-            right_face = self.cube.get_face_from_orient(RIGHT)
-            back_face = self.cube.get_face_from_orient(BACK)
-
-            front_color = self.cube.get_color_from_orient(FRONT)
-            left_color = self.cube.get_color_from_orient(LEFT)
-            right_color = self.cube.get_color_from_orient(RIGHT)
-            back_color = self.cube.get_color_from_orient(BACK)
-
-            def adjacent_corners():
-                '''
-                Using the current orientation, returns the front face which contains
-                a back with matching corners
-                '''
-                def check_back_corners(front_face, left_face, right_face, front_color, left_color, right_color):
-                    front_left = front_face[0][0] == front_color 
-                    front_right = front_face[0][2] == front_color
-                    front_match = front_left and front_right
-
-                    right_match = right_face[0][0] == right_color 
-                    left_match = left_face[0][2] == left_color 
-
-                    return front_match and right_match and left_match
-
-                def check_front_corners(front_face, left_face, right_face, front_color, left_color, right_color):
-                    front_left = front_face[0][0] == right_color 
-                    front_right = front_face[0][2] == left_color 
-                    front_match = front_left and front_right 
-
-                    right_match = right_face[0][0] == front_color 
-                    left_match = left_face[0][2] == front_color
-
-                    return front_match and right_match and left_match 
-
-                # check front case
-                front_case_back = check_back_corners(back_face, right_face, left_face, back_color, right_color, left_color)
-                front_case_front = check_front_corners(front_face, left_face, right_face, front_color, left_color, right_color)
-                print(f'front_case_back: {front_case_back}')
-                print(f'front_case_front: {front_case_front}')
-
-                # check right case
-                right_case_back = check_back_corners(left_face, back_face, front_face, left_color, back_color, front_face)
-                right_case_front = check_front_corners(right_face, front_face, back_face, right_color, front_color, back_color)
-                print(f'right_case_back: {right_case_back}')
-                print(f'right_case_front: {right_case_front}')
-
-                # check left case
-                left_case_back = check_back_corners(right_face, front_face, back_face, right_color, front_color, back_color)
-                left_case_front = check_front_corners(left_face, back_face, front_face, left_color, back_color, front_color)
-                print(f'left_case_back: {left_case_back}')
-                print(f'left_case_front: {left_case_front}')
-
-                # check back case
-                back_case_back = check_back_corners(front_face, left_face, right_face, front_color, left_color, right_color)
-                back_case_front = check_front_corners(back_face, right_face, left_face, back_color, right_color, left_color)
-                print(f'back_case_back: {back_case_back}')
-                print(f'back_case_front: {back_case_front}')
-
-                if front_case_back and front_case_front:
-                    return FRONT
-                elif right_case_back and right_case_front:
-                    return RIGHT
-                elif left_case_back and left_case_front:
-                    return LEFT 
-                elif back_case_back and back_case_front:
-                    return BACK 
+            back_color = None
+            for _ in range(4):
+                front_face = self.cube.get_face_from_orient(FRONT)
+                if front_face[0][0] == front_face[0][2]:
+                    back_color = front_face[0][0]
                 else:
-                    return None
-            
-            def diagonal_corners():
-                def check_corners_five(front_face, right_face, left_face, left_color, back_color):
-                    front_left = front_face[0][0] == front_color 
-                    front_right = front_face[0][2] == back_color 
-                    front_match = front_left and front_right 
-
-                    right_match = right_face[0][0] == left_color
-                    left_match = left_face[0][2] == left_color
-
-                    return front_match and right_match and left_match
-                
-                def check_corners_six(front_face, right_face, left_face, right_color, back_color):
-                    front_left = front_face[0][0] == back_color 
-                    front_right = front_face[0][2] == front_color  
-                    front_match = front_left and front_right 
-
-                    right_match = right_face[0][0] == right_color
-                    left_match = left_face[0][2] == right_color
-
-                    return front_match and right_match and left_match
-
-                blue_face = self.cube.get_face_from_color(BLUE)
-                green_face = self.cube.get_face_from_color(GREEN)
-                orange_face = self.cube.get_face_from_color(ORANGE)
-                red_face = self.cube.get_face_from_color(RED)
-                
-                # check for cube five match
-                check_five_front = check_corners_five(blue_face, red_face, orange_face, ORANGE, GREEN)
-                check_five_back = check_corners_five(green_face, orange_face, red_face, RED, BLUE)
-                cube_five_match = check_five_back and check_five_front
-
-                # check for cube six match
-                check_six_front = check_corners_six(blue_face, red_face, orange_face, RED, GREEN)
-                check_six_back = check_corners_six(green_face, orange_face, red_face, ORANGE, BLUE)
-                cube_six_match = check_six_back and check_six_front
-
-                if cube_five_match or cube_six_match:
-                    return self.cube.get_orient_from_color(BLUE)
-                else:
-                    return None
-
-            def bring_to_front(orientation):
-                if orientation == LEFT:
-                    return [CUBE_ROT_RIGHT]
-                elif orientation == RIGHT:
-                    return [CUBE_ROT_LEFT]
-                elif orientation == BACK:
-                    return [CUBE_ROT_RIGHT, CUBE_ROT_RIGHT]
-                elif orientation == FRONT:
-                    return []
-                
-            def apply_sequence():
-                seq = [RIGHT_PRIME, FRONT, RIGHT_PRIME, BACK, BACK, RIGHT, FRONT_PRIME, RIGHT_PRIME, BACK, BACK, RIGHT, RIGHT, UP_PRIME]
-                self.cube.apply_seq(seq)
-            print(self.cube)
-            # bring face to front
-            adjacent = adjacent_corners()
-            diagonal = diagonal_corners()
-            if adjacent is not None:
-                self.cube.apply_seq(bring_to_front(adjacent))
-                apply_sequence()
-            elif diagonal is not None:
-                self.cube.apply_seq(bring_to_front(diagonal))
-                apply_sequence()
-            # no match found
-            else:
-                self.cube.apply_seq([UP])
-            
-
+                    self.cube.apply_seq([UP])
+            for _ in range(4):
+                if self.cube.get_color_from_orient(BACK) != back_color:
+                    self.cube.apply_seq([CUBE_ROT_LEFT])
+            for _ in range(4):
+                back_face = self.cube.get_face_from_orient(BACK)
+                if not (back_face[0][0] == back_face[0][2] and back_face[0][0] == back_color):
+                    self.cube.apply_seq([UP])
+            self.cube.apply_seq(seq)
+     
     def check_position_yellow_corners(self):
         blue_face = self.cube.get_face_from_color(BLUE)
         red_face = self.cube.get_face_from_color(RED)
@@ -518,31 +394,38 @@ class Solver:
 
         return blue_red_corner and blue_orange_corner and green_orange_corner and green_red_corner 
 
-
     def solve_final_stage(self):
 
-        def put_solved_face_on_back():
-            for _ in range(4):
-                back_face = self.cube.get_face_from_orient(BACK)
-                top_layer = back_face[0]
-                if top_layer[0] == top_layer[1] and top_layer[1] == top_layer[2]:
-                    break
+        for _ in range(3):
+            if self.check_final_step():
+                break
+            solved_color = None
+            for color in [ORANGE, GREEN, RED, BLUE]:
+                face = self.cube.get_face_from_color(color)
+                center = face[1][1]
+                if face[0][0] == center and face[0][1] == center and face[0][2] == center:  
+                    solved_color = center      
                 else:
-                    self.cube.apply_seq(CUBE_ROT_LEFT)
+                    self.cube.apply_seq([CUBE_ROT_LEFT])
+  
+            if solved_color is not None:
+                for _ in range(4):
+                    if self.cube.get_face_from_orient(BACK)[1][1] != solved_color:
+                        self.cube.apply_seq([CUBE_ROT_LEFT])
 
-        seq = [FRONT, FRONT, UP, LEFT, RIGHT_PRIME, FRONT, FRONT, LEFT_PRIME, RIGHT, UP, FRONT,FRONT]
+            front_face = self.cube.get_face_from_orient(FRONT)
+            right_face = self.cube.get_face_from_orient(RIGHT)
+            if front_face[0][1] == right_face[1][1]:
+                self.cube.apply_seq([FRONT, FRONT, UP_PRIME, LEFT, RIGHT_PRIME, FRONT, FRONT, LEFT_PRIME, RIGHT, UP_PRIME, FRONT,FRONT])
+            else:
+                self.cube.apply_seq([FRONT, FRONT, UP, LEFT, RIGHT_PRIME, FRONT, FRONT, LEFT_PRIME, RIGHT, UP, FRONT,FRONT])
 
-        while not check_final_step():
-            put_solved_face_on_back()
-            self.cube.apply_seq(seq)
-    
     def check_final_step(self):
-        colors = [RED, ORANGE, GREEN, BLUE]
-        final_stage_solved = True
-        for color in color:
+        solved = True
+        for color in [RED, ORANGE, GREEN, BLUE]:
             face = self.cube.get_face_from_color(color)
             top_layer = face[0]
             face_solved = top_layer[0] == top_layer[1] and top_layer[1] == top_layer[2]
-            final_stage_solved = final_stage_solved and face_solved
+            solved = solved and face_solved
 
-        return final_stage_solved
+        return solved

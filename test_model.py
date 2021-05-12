@@ -131,5 +131,25 @@ def test_get_orient_from_color():
 
     print(c.get_orient_from_color(WHITE))
 
+
+def test_cube_rot():
+
+    c = Cube()
+    random_seq = get_random_seq()
+    c.apply_seq(random_seq)
+    print("Before")
+    print(c)
+    for i in range(4):
+        print(i+1)
+        c.apply_seq([CUBE_ROT_RIGHT])
+        print(c)
+    print("After")
+    print(c)
+    z = Cube()
+    z.apply_seq(random_seq)
+    assert c == z
+    # print("Right")
+    # c.apply_seq([CUBE_ROT_RIGHT])
+    # print(c)
 if __name__ == "__main__":
-    test_get_orient_from_color()
+    test_cube_rot()

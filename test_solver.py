@@ -5,13 +5,11 @@ from solver import Solver
 import random
 import time
 
-
 def get_mixed_cube():
     seq = get_random_seq()
     c = Cube()
     c.apply_seq(seq)
     return c
-
 
 def test_solve_daisy():
     for i in range(10):
@@ -28,7 +26,6 @@ def test_solve_daisy():
 
     print("test passed!")
 
-
 def test_solve_white_cross():
     start_time = time.time()
     for i in range(1000):
@@ -42,7 +39,6 @@ def test_solve_white_cross():
 
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
-
 
 def test_solve_white_corners():
     start_time = time.time()
@@ -77,7 +73,6 @@ def test_solve_white_corners():
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
 
-
 def stress_test():
     start_time = time.time()
     for i in range(5000):
@@ -91,7 +86,6 @@ def stress_test():
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
 
-
 def test_solve_middle_layer():
     start_time = time.time()
     diff_sum = diff_prct = 0
@@ -103,16 +97,6 @@ def test_solve_middle_layer():
         assert not s.check_middle_layer()
         sequence = s.solve()
         assert s.check_middle_layer()
-        # cleaned = clean(sequence)
-        # diff_sum += (len(sequence) - len(cleaned))
-        # diff_prct += (1 - len(cleaned) / len(sequence))
-
-        # b = Cube()
-        # b.apply_seq(sequence)
-        # z = Cube()
-        # z.apply_seq(cleaned)
-        # assert b == z
-        # assert hash(b) == hash(z)
         if i % (n / 5) == 0:
             print(len(sequence), sequence)
             # print(len(cleaned), cleaned)
@@ -125,7 +109,6 @@ def test_solve_middle_layer():
 
     print("Success!")
     print("time: ", (time.time() - start_time), "s")
-
 
 def test_hash():
     start = time.time()
@@ -155,7 +138,6 @@ def test_solve_yellow_cross():
     print("Success!")
     print("time: ", (time.time() - start), "s")
 
-
 def test_solve_yellow_corners():
     start = time.time()
     for i in range(100):
@@ -174,11 +156,12 @@ def test_solve_position_yellow_corners():
     for i in range(1):
         c = get_mixed_cube()
         s = Solver(c)
+        # print(s.cube)
         assert not s.check_position_yellow_corners()
         s.solve()
         assert s.check_position_yellow_corners()
-        print(s.cube)
-        if i % 20 == 0:
+        # print(s.cube)
+        if i % 100 == 0:
             print(s.cube)
     print("Success!")
     print("time: ", (time.time() - start), "s")
@@ -186,16 +169,31 @@ def test_solve_position_yellow_corners():
 def test_solve_cube():
     start = time.time()
     solved = Cube()
-    for i in range(100):
+    for i in range(50):
         c = get_mixed_cube()
         s = Solver(c)
         assert not c == solved
         s.solve()
         assert c == solved
-        if i % 20 == 0:
-            print(s.cube)
+        actions = clean(c.actions)
+        print(len(actions), "diff", len(c.actions) - len(actions))
     print("Success!")
     print("time: ", (time.time() - start), "s")
 
+def speed_test(n):
+    cube_list = []
+    for i in range(n):
+        c = Cube()
+        c.apply_seq(get_random_seq())
+        c.apply_seq(get_random_seq())
+        cube_list.append(c)
+    start_time = time.time()
+    for cube in cube_list:
+        s = Solver(cube)
+        s.solve()
+    print("Finished solving", n, "cubes")
+    finish_time = time.time() - start_time
+    print(finish_time, "seconds")
+
 if __name__ == "__main__":
-    test_solve_position_yellow_corners()
+    speed_test(1)

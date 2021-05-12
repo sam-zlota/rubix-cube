@@ -5,7 +5,7 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
 
 ### More to come:
 - JS web app with GUI cube editor
-- photo integration (CV pipeline to accept images as input)
+- photo integration (CV pipeline to accept 6 2D images as input)
 - implement AI solving methods to reduce number of moves 
   - thistlethwaite algorithm (upper bound 52  moves, takes roughly 1-2min)
   - korf's algorithm (optimal, upper bound 26 moves, takes 0-2 days)

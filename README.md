@@ -1,7 +1,7 @@
 # rubix-cube
 
 This project implements the standard solving procedure for a 3x3 rubix cube as specified [here](https://www.rubiks.com/media/guides/RBL_solve_guide_CUBE_US_5.375x8.375in_AW_27Feb2020_VISUAL.pdf).
-For a scrambled cube, it takes roughly 3.5 ms to solve (depending on computational resources) and the solution sequence is on average 245 quarter turn moves.
+For a scrambled cube, it takes roughly 3.5 ms to solve (depending on computational resources) and the solution sequence is on average 245 quarter-turn moves.
 
 Here are statistics for 10,000 cubes:
 

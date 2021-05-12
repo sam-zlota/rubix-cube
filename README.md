@@ -10,6 +10,6 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
     - ~6x less moves 
     - \>12,000x slower (4 orders of magnitude)
-  - [korf's algorithm](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) (optimal, upper bound [God's Number](https://www.cube20.org/qtm/), takes 1-2 days)
+  - [korf's algorithm](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) (optimal, upper bound [God's Number](https://www.cube20.org/qtm/), takes many hours to days)
     - optimal move sequence
-    - \>17,000,000x slower (7 orders of magnitude)
+    - \>10,000,000x slower (7 orders of magnitude)

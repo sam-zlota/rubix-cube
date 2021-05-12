@@ -4,11 +4,9 @@ This project implements the standard solving procedure for a 3x3 rubix cube as s
 It can currently solve 10,000 cubes in just over 30 seconds. It takes roughly 3.5 ms to solve a single cube. It takes roughly 245 moves to solve a single cube.
 
 Here are statistics for 10,000 cubes:
-![image](https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png)
 
 
-
-<img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" width="200" height="400"/>
+<img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" width="500" height="1200"/>
 
 
 

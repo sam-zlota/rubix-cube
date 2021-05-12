@@ -9,7 +9,7 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
 - implement AI solving methods. Because these have been implemented [before](https://github.com/benbotto/rubiks-cube-cracker)), we look to improve their upper bounds both in the quarter-turn metric (if suboptimal) and time.
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
     - ~6x less moves 
-    - \>12,000x slower (4 orders of magnitude)
+    - ~10,000x slower (4 orders of magnitude)
   - [korf's algorithm](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) (optimal, upper bound [God's Number](https://www.cube20.org/qtm/), takes many hours to days)
     - optimal move sequence
-    - \>10,000,000x slower (7 orders of magnitude)
+    - ~10,000,000x slower (7 orders of magnitude)

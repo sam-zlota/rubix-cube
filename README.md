@@ -8,4 +8,8 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
 - photo integration (CV pipeline to accept 6 2D images as input)
 - implement AI solving methods to reduce number of moves (inspiration: [here](https://github.com/benbotto/rubiks-cube-cracker))
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
+    - ~6x less moves (1 order of magintude)
+    - 10,000x slower (5 orders of magnitude)
   - [korf's algorithm](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) (optimal, upper bound [God's Number](https://www.cube20.org/qtm/), takes 0-2 days)
+    - ~12x less moves (>1 order of magnitude, but optimal)
+    - ~20,000,000x slower (8 orders of magnitude)

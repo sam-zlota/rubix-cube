@@ -6,6 +6,6 @@ It can currently solve 10,000 cubes in just over 30 seconds. It takes less than 
 ### More to come:
 - JS web app with GUI cube editor
 - photo integration (CV pipeline to accept 6 2D images as input)
-- implement AI solving methods to reduce number of moves 
-  - thistlethwaite algorithm (upper bound 52  moves, takes roughly 1-2min)
-  - korf's algorithm (optimal, upper bound 26 moves, takes 0-2 days)
+- implement AI solving methods to reduce number of moves ([inspiration](https://github.com/benbotto/rubiks-cube-cracker)
+  - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
+  - [korf's algorithm](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) (optimal, upper bound [God's Number](https://www.cube20.org/qtm/), takes 0-2 days)

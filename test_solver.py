@@ -1,9 +1,11 @@
+from matplotlib.pyplot import title
 from model import Cube
 from constants import *
 from utils import *
 from solver import Solver
 import random
 import time
+import numpy as np
 
 def get_mixed_cube():
     seq = get_random_seq()
@@ -167,24 +169,84 @@ def test_solve_position_yellow_corners():
     print("time: ", (time.time() - start), "s")
 
 def test_solve_cube():
-    start = time.time()
+    actions_list = []
+    times_list = []
     solved = Cube()
-    for i in range(50):
-        c = get_mixed_cube()
+    for i in range(10000):
+        shuffle = get_random_seq()
+        c = Cube()
+        c.apply_seq(shuffle)
+        if i % 25000 == 0:
+            print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
+            print("Shuffle Sequence: ", shuffle)
+            print(c)
         s = Solver(c)
         assert not c == solved
+        start = time.time()
         s.solve()
+        total = time.time() - start
+        times_list.append(total* 1000)
         assert c == solved
         actions = clean(c.actions)
-        print(len(actions), "diff", len(c.actions) - len(actions))
-    print("Success!")
-    print("time: ", (time.time() - start), "s")
+        actions_list.append(len(actions))
+        if i % 25000 == 0:
+            print(i, "Solved!")
+            print(total * 1000, "ms")
+            print(len(actions), "moves")
+            print("Solved Sequence: ", actions)
+            print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
+
+        # print(len(actions), "diff", len(c.actions) - len(actions))
+    print("\n\n***Final Report(N=10,000)***\n")
+    import seaborn as sns
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from scipy.stats import mode
+  
+    times_list = np.round(times_list, decimals=3)
+    print("\t\t\tTime")
+    print("Average: ", round(sum(times_list)/len(times_list), 3), "ms", ", std: ", round(np.std(times_list), 3))
+    print("Median: ", np.median(times_list), "ms")
+    mode_arr, count = mode(times_list)
+    print("Mode: ", mode_arr[0], ", n:",count[0])
+    print("Max: ", max(times_list), "ms")
+    print("Min: ",  min(times_list), "ms")
+
+    new_list = []
+    std = round(np.std(times_list), 3)
+    avg = round(sum(times_list)/len(times_list), 3)
+    for time_ in times_list:
+        if time_ <= (3*std + avg) and time_ >= (avg - 3*std):
+             new_list.append(time_)
+    times_list = new_list
+    fig, axs = plt.subplots(figsize=(10,7))
+    sns.distplot(pd.Series(times_list,name="Times(ms)"),ax=axs)    # sns.distplot(actions_list)
+    plt.show()
+    print()
+    print("\t\t\tActions")
+    print("Average: ", round(sum(actions_list)/len(actions_list),3), ", std: ", round(np.std(actions_list), 3))
+    print("Median: ", np.median(actions_list))
+    mode_arr, count = mode(actions_list)
+    print("Mode: ", mode_arr[0], ", n:",count[0])
+    # print()
+
+    print("Max: ", max(actions_list))
+    print("Min: ",  min(actions_list))
+    print()
+    fig, axs = plt.subplots(figsize=(10,7))
+    sns.distplot(pd.Series(actions_list,name="Actions(quarter-turn metric)"), ax=axs)
+    # sns.distplot(actions_list)
+    plt.show()
+
+    
+
+
+    # print("time: ", ( "s")
 
 def speed_test(n):
     cube_list = []
     for i in range(n):
         c = Cube()
-        c.apply_seq(get_random_seq())
         c.apply_seq(get_random_seq())
         cube_list.append(c)
     start_time = time.time()
@@ -196,4 +258,4 @@ def speed_test(n):
     print(finish_time, "seconds")
 
 if __name__ == "__main__":
-    speed_test(1)
+    speed_test(100)

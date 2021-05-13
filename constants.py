@@ -12,10 +12,13 @@ RIGHT_PRIME = "R'"
 FRONT_PRIME = "F'"
 BACK_PRIME = "B'"
 
-CUBE_ROT_UP = "UU"
-CUBE_ROT_DOWN = "DD"
-CUBE_ROT_LEFT = "LL"
-CUBE_ROT_RIGHT = "RR"
+
+Z_ROT = "Z"
+Z_ROT_PRIME = "Z'"
+Y_ROT = "Y"
+Y_ROT_PRIME = "Y'"
+X_ROT = "X"
+X_ROT_PRIME = "X'"
 
 
 YELLOW ="y"

@@ -20,7 +20,12 @@ from utils import *
             - the color identity of a face will NOT change, it is the center square at (1,1) 
             - the orientation identity of a face may change
 
-        A cube is a collection of 6 faces.
+        A cube is a collection of 6 faces (a unique bijective mapping of color<->orientation)
+            - at any point in time, if you know the color of a face, then you can determine the spatial position
+            of that face, and at any time, if you know the spatial position of a face, then you can determine the
+            color of that face.
+                - for example: both yellow and green cannot both be up at the same time and yellow cannot both be up
+                    and down at the same time
 
         A cube can be mutated by twists and rotations
             - a twist will rotate a face clockwise or counterclockwise

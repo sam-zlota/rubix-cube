@@ -1,29 +1,30 @@
 from utils import *
 
 '''
-Represents data structure for cube with dictionary containing orientation based on color. Orientation dict has 
-keys of up, down, front, back, left, and right and values of the corresponding colors for the sides. Contains 
-dictionary containing cube arrays with color as keys and array as values.
+    Represents data structure for cube with dictionary containing orientation based on color. Orientation dict has 
+    keys of up, down, front, back, left, and right and values of the corresponding colors for the sides. Contains 
+    dictionary containing cube arrays with color as keys and array as values.
 
+    Data Definition:
 
-A color is one of {YELLOW, WHITE, BLUE, GREEN, RED, ORANGE}
+        A color is one of {YELLOW, WHITE, BLUE, GREEN, RED, ORANGE}
 
-An orientation is one of {UP, DOWN, LEFT, RIGHT, FRONT, BACK}
+        An orientation is one of {UP, DOWN, LEFT, RIGHT, FRONT, BACK}
 
-A twist is one of {UP, DOWN, LEFT, RIGHT, FRONT, BACK, UP_PRIME, DOWN_PRIME, 
-                    LEFT_PRIME, RIGHT_PRIME, FRONT_PRIME, BACK_PRIME}
+        A twist is one of {UP, DOWN, LEFT, RIGHT, FRONT, BACK, UP_PRIME, DOWN_PRIME, 
+                            LEFT_PRIME, RIGHT_PRIME, FRONT_PRIME, BACK_PRIME}
 
-A rotation is one of {X_ROT, Y_ROT, Z_ROT, X_ROT_PRIME, Y_ROT_PRIME, Z_ROT_PRIME}
+        A rotation is one of {X_ROT, Y_ROT, Z_ROT, X_ROT_PRIME, Y_ROT_PRIME, Z_ROT_PRIME}
 
-A face is a 3x3 array of colors and can be identified by a unique pair (color, orientation) pair.
-    - the color identity of a face will NOT change, it is the center square at (1,1) 
-    - the orientation identity of a face may change
+        A face is a 3x3 array of colors and can be identified by a unique pair (color, orientation) pair.
+            - the color identity of a face will NOT change, it is the center square at (1,1) 
+            - the orientation identity of a face may change
 
-A cube is a collection of 6 faces.
+        A cube is a collection of 6 faces.
 
-A cube can be mutated by twists and rotations
-    - a twist will rotate a face clockwise or counterclockwise
-    - a rotation will reorient the cube in space along a specified axis x, y, z
+        A cube can be mutated by twists and rotations
+            - a twist will rotate a face clockwise or counterclockwise
+            - a rotation will reorient the cube in space along a specified axis x, y, z
 
 '''
 

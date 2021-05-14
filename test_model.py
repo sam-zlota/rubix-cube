@@ -141,7 +141,7 @@ def test_cube_rot():
     print(c)
     for i in range(4):
         print(i+1)
-        c.apply_seq([CUBE_ROT_RIGHT])
+        c.apply_seq([Y_ROT])
         print(c)
     print("After")
     print(c)
@@ -149,7 +149,7 @@ def test_cube_rot():
     z.apply_seq(random_seq)
     assert c == z
     # print("Right")
-    # c.apply_seq([CUBE_ROT_RIGHT])
+    # c.apply_seq([Y_ROT])
     # print(c)
 if __name__ == "__main__":
     test_cube_rot()

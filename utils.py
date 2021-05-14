@@ -55,14 +55,14 @@ def get_inverse(step):
         return step + "'"
     elif step[1] == "'":
         return step[0]
-    elif step == CUBE_ROT_UP:
-        return CUBE_ROT_DOWN
-    elif step == CUBE_ROT_DOWN:
-        return CUBE_ROT_UP
-    elif step == CUBE_ROT_LEFT:
-        return CUBE_ROT_RIGHT
-    elif step == CUBE_ROT_RIGHT:
-        return CUBE_ROT_LEFT
+    elif step == X_ROT:
+        return X_ROT_PRIME
+    elif step == X_ROT_PRIME:
+        return X_ROT
+    elif step == Y_ROT_PRIME:
+        return Y_ROT
+    elif step == Y_ROT:
+        return Y_ROT_PRIME
     else:
         raise ValueError 
 
@@ -132,11 +132,17 @@ def handle_inverses(steps):
         else:
             res.append(step)
     return res
-
+def handle_cube_rots(steps):
+    res = []
+    for step in steps:
+        if not(len(step) > 1 and step[0]==step[1]):
+            res.append(step)
+    return res
+    
 def clean(steps):
     """
         Cleans the sequence of steps by handling repeats and commutative moves.
     """
-    return handle_inverses(handle_repeats(steps))
+    return handle_cube_rots(handle_inverses(handle_repeats(steps)))
 
 

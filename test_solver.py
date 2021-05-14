@@ -196,4 +196,4 @@ def speed_test(n):
     print(finish_time, "seconds")
 
 if __name__ == "__main__":
-    speed_test(1)
+    speed_test(1000)

@@ -43,6 +43,15 @@ class Cube:
                              BLUE: face_init(BLUE), RED: face_init(RED), ORANGE: face_init(ORANGE)}
         self.actions = []
 
+    def set_state(self, data):
+        self.__color_dict[self.__orient_dict[FRONT]] = data["Front Face"]
+        self.__color_dict[self.__orient_dict[UP]] = data["Up Face"]
+        self.__color_dict[self.__orient_dict[DOWN]] = data["Down Face"]
+        self.__color_dict[self.__orient_dict[BACK]] = data["Back Face"]
+        self.__color_dict[self.__orient_dict[LEFT]] = data["Left Face"]
+        self.__color_dict[self.__orient_dict[RIGHT]] = data["Right Face"]
+
+
     def __str__(self):
         """
         Returns current state of rubik's cube as a string.

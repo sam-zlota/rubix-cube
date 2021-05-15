@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>First Page</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='index.css') }}">
+    </head>
+    <body>
+        <button type="button" id="increase-score">Increase Score</button>
+        <span id="display-score" name="n">0</span>
+
+        <form action="#" method="post">
+            <input type="hidden" id="score-value" name="number" value="">
+            <input type="submit" name="submit">
+        </form>
+        <h3 id="face-text">Front Face</h3>
+        <!-- <form action="#" method="post">
+            <input type="button" class="button" id="button1">
+            <input type="button" class="button" id="button2">
+            <input type="button" class="button" id="button3">
+            <input type="button" class="button" id="button4">
+            <input type="button" class="button" id="button5">
+            <input type="button" class="button" id="button6">
+            <input type="button" class="button" id="button7">
+            <input type="button" class="button" id="button8">
+            <input type="button" class="button" id="button9">
+        </form> -->
+        <button class="button" id="button1"></button>
+        <button class="button" id="button2"></button>
+        <button class="button" id="button3"></button>
+        <button class="button" id="button4"></button>
+        <button class="button" id="button5"></button>
+        <button class="button" id="button6"></button>
+        <button class="button" id="button7"></button>
+        <button class="button" id="button8"></button>
+        <button class="button" id="button9"></button>
+
+        <button class="change-face">Next Face</button>
+        <button class="reset-cube">Reset Cube</button>
+        <button class="solve-cube">Solve Cube</button>
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+    </body>
+</html>

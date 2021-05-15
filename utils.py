@@ -1,21 +1,41 @@
+from __future__ import print_function
 from constants import *
 import random
+from sys import getsizeof, stderr
+from itertools import chain
+from collections import deque
+from reprlib import repr
 
-def get_random_seq():
+
+def get_random_seq(n=100):
     '''
-    Returns a mixed up rubik's cube sequence
+        Returns a mixed up rubik's cube sequence
     '''
-    
-    actions = [UP, UP_PRIME, FRONT,FRONT_PRIME,LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME, BACK, BACK_PRIME, DOWN, DOWN_PRIME]
+    actions = [
+        UP, UP_PRIME, FRONT, FRONT_PRIME, LEFT, LEFT_PRIME, RIGHT, RIGHT_PRIME,
+        BACK, BACK_PRIME, DOWN, DOWN_PRIME
+    ]
     seq = []
-    for _ in range(100):
+    for _ in range(n):
         seq.append(random.choice(actions))
     return seq
 
+
+def is_solved(cube):
+    """
+        Determines if the cube is solved in any orientation.
+    """
+    for color in [RED, ORANGE, YELLOW, WHITE, GREEN, BLUE]:
+        for i in range(3):
+            for j in range(3):
+                if cube[color, i, j] != color:
+                    return False
+    return True
+
+
 def face_init(color):
     '''
-    Creates a three dimensional array with the given color string. 
-    Array represents the solved state of a rubik's cube.
+        Creates a three dimensional array with the given color . 
     '''
     arr = []
     sub_arr = []
@@ -28,43 +48,6 @@ def face_init(color):
 
     return arr
 
-def get_opposite(color):
-    '''
-    Returns the opposite color to the given one on a 
-    Rubik's cube.
-    '''
-    if color == YELLOW:
-        return WHITE
-    if color == WHITE:
-        return YELLOW
-    if color == RED:
-        return ORANGE
-    if color == ORANGE:
-        return RED
-    if color == BLUE:
-        return GREEN
-    if color == GREEN:
-        return BLUE
-
-def get_inverse(step):
-    """
-        Returns the inverse move for the given step. 
-        (Ex.) get_inverse(UP) ->  UP_PRIME
-    """
-    if len(step) == 1:
-        return step + "'"
-    elif step[1] == "'":
-        return step[0]
-    elif step == X_ROT:
-        return X_ROT_PRIME
-    elif step == X_ROT_PRIME:
-        return X_ROT
-    elif step == Y_ROT_PRIME:
-        return Y_ROT
-    elif step == Y_ROT:
-        return Y_ROT_PRIME
-    else:
-        raise ValueError 
 
 def get_inverse_sequence(steps):
     """
@@ -74,9 +57,10 @@ def get_inverse_sequence(steps):
     """
     res = []
     for step in steps:
-        res.append(get_inverse(step))
+        res.append(INVERSE[step])
     res.reverse()
     return res
+
 
 def handle_repeats(steps):
     """
@@ -96,7 +80,7 @@ def handle_repeats(steps):
     ctr = 1
     for step in steps[1:]:
         if step == curr:
-            ctr+=1
+            ctr += 1
         else:
             repeats = ctr % 4
             if repeats == 1:
@@ -118,6 +102,7 @@ def handle_repeats(steps):
         res.append(get_inverse(curr))
     return res
 
+
 def handle_inverses(steps):
     """
         Handles succesive commutative moves by removing them.
@@ -127,18 +112,18 @@ def handle_inverses(steps):
     res = []
     res.append(steps[0])
     for step in steps[1:]:
-        if len(res) > 0 and step == get_inverse(res[-1:][0]):
+        if len(res) > 0 and step == INVERSE[res[-1:][0]]:
             res = res[:-1]
         else:
             res.append(step)
     return res
+
+
 def handle_cube_rots(steps):
-    res = []
-    for step in steps:
-        if not(len(step) > 1 and step[0]==step[1]):
-            res.append(step)
-    return res
-    
+    #FIXME
+    return steps
+
+
 def clean(steps):
     """
         Cleans the sequence of steps by handling repeats and commutative moves.
@@ -146,3 +131,26 @@ def clean(steps):
     return handle_cube_rots(handle_inverses(handle_repeats(steps)))
 
 
+# #FIXME
+# INT_BITS = 64
+
+# # Function to left
+# # rotate n by d bits
+# def leftRotate(n, d):
+
+#     # In n<<d, last d bits are 0.
+#     # To put first 3 bits of n at
+#     # last, do bitwise or of n<<d
+#     # with n >>(INT_BITS - d)
+#     return (n << d) | (n >> (INT_BITS - d))
+
+
+# # Function to right
+# # rotate n by d bits
+# def rightRotate(n, d):
+
+#     # In n>>d, first d bits are 0.
+#     # To put last 3 bits of at
+#     # first, do bitwise or of n>>d
+#     # with n <<(INT_BITS - d)
+#     return (n >> d) | (n << (INT_BITS - d)) & 0xFFFFFFFF

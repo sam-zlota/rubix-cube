@@ -21,6 +21,7 @@ def test_print_v2():
     # new state
     print(c.print_v2())
 
+
 def test_reorient(move):
     c = get_mixed_cube()
 
@@ -35,13 +36,15 @@ def test_reorient(move):
         print(c.print_v2())
     elif move == 'left':
         # rotate left one face
-        c.reorient(c.orient_dict[up], c.orient_dict[right], c.orient_dict[front])
+        c.reorient(
+            c.orient_dict[up], c.orient_dict[right], c.orient_dict[front])
 
         # print new state
         print(c.print_v2())
     elif move == 'up':
         # rotate up one face
-        c.reorient(c.orient_dict[front], c.orient_dict[down], c.orient_dict[left])
+        c.reorient(
+            c.orient_dict[front], c.orient_dict[down], c.orient_dict[left])
 
         # print new state
         print(c.print_v2())
@@ -51,6 +54,7 @@ def test_reorient(move):
 
         # print new state
         print(c.print_v2())
+
 
 def test_face_rotate(clockwise):
     c = get_mixed_cube()
@@ -64,10 +68,11 @@ def test_face_rotate(clockwise):
     # print new state
     print(c.print_v2())
 
+
 def test_cube_rot_left():
     c = get_mixed_cube()
 
-    # print original state 
+    # print original state
     print(c.print_v2())
 
     # rotate left
@@ -76,10 +81,11 @@ def test_cube_rot_left():
     # print new state
     print(c.print_v2())
 
+
 def test_cube_rot_right():
     c = get_mixed_cube()
 
-    # print original state 
+    # print original state
     print(c.print_v2())
 
     # rotate left
@@ -88,10 +94,11 @@ def test_cube_rot_right():
     # print new state
     print(c.print_v2())
 
+
 def test_cube_rot_up():
     c = get_mixed_cube()
 
-    # print original state 
+    # print original state
     print(c.print_v2())
 
     # rotate up
@@ -100,10 +107,11 @@ def test_cube_rot_up():
     # print new state
     print(c.print_v2())
 
+
 def test_cube_rot_down():
     c = get_mixed_cube()
 
-    # print original state 
+    # print original state
     print(c.print_v2())
 
     # rotate down
@@ -112,22 +120,24 @@ def test_cube_rot_down():
     # print new state
     print(c.print_v2())
 
+
 def test_rotate(direction, prime):
     c = get_mixed_cube()
 
-    # print original state 
+    # print original state
     print(c.print_v2())
 
     # rotate down
-    c.rotate(direction,prime)
+    c.rotate(direction, prime)
 
     # print new state
     print(c.print_v2())
 
+
 def test_get_orient_from_color():
     c = Cube()
 
-    print(c) 
+    print(c)
 
     print(c.get_orient_from_color(WHITE))
 
@@ -140,7 +150,7 @@ def test_cube_rot():
     print("Before")
     print(c)
     for i in range(4):
-        print(i+1)
+        print(i + 1)
         c.apply_seq([Y_ROT])
         print(c)
     print("After")
@@ -151,5 +161,7 @@ def test_cube_rot():
     # print("Right")
     # c.apply_seq([Y_ROT])
     # print(c)
+
+
 if __name__ == "__main__":
     test_cube_rot()

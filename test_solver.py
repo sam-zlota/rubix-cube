@@ -282,6 +282,6 @@ def speed_test(n):
 
 
 if __name__ == "__main__":
-    c = speed_test(10)
+    c = speed_test(1)
 
     # print(total_size(c))

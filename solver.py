@@ -28,6 +28,7 @@ class Solver:
         """
         # search face
         while not self.check_daisy():
+            print("stuck in solve_daisy")
             if self.cube[UP, 2, 1] == WHITE:
                 self.cube.apply(UP)
             elif self.cube[FRONT, 0, 1] == WHITE:
@@ -55,6 +56,7 @@ class Solver:
         for _ in range(4):
             while ((self.cube[FRONT, 0, 1] != self.cube[FRONT, 1, 1])
                    or (self.cube[UP, 2, 1] != WHITE)):
+                print("suck in white cross")
                 self.cube.apply_seq([UP])
             self.cube.apply_seq([FRONT, FRONT, Y_ROT_PRIME])
 
@@ -107,7 +109,7 @@ class Solver:
 
         # for each corner
         while not self.check_white_corners():
-
+            print("stuck in white corners")
             right_corner = (
                 (self.cube[UP, 2, 2] == WHITE)
                 and (self.cube[FRONT, 0, 2]) == (self.cube[FRONT, 1, 1])
@@ -181,19 +183,24 @@ class Solver:
         2. if no top edge piece is valid
             - check for middle edge piece with no yellow side
         """
-        def get_valid_piece(front, right, back, left):
+        def get_valid_piece():
             top_edge_loc = [(2, 1), (1, 2), (0, 1), (1, 0)]
-            faces_to_search = [front, right, back, left]
+            faces_to_search = [FRONT, RIGHT, BACK, LEFT]
             valid_piece = None
             i = 0
             # attempts to find valid top layer edge piece
             while valid_piece is None and i < 4:
                 # if both top and front faces are not yellow, then valid
-                if faces_to_search[i][0][1] != YELLOW and top_face[
-                        top_edge_loc[i][0]][top_edge_loc[i][1]] != YELLOW:
+                if self.cube[faces_to_search[i], 0, 1] != YELLOW and self.cube[UP, top_edge_loc[i][0], top_edge_loc[i][0]] != YELLOW:
                     valid_piece = i
                     break
                 i += 1
+
+                # if faces_to_search[i][0][1] != YELLOW and top_face[
+                #         top_edge_loc[i][0]][top_edge_loc[i][1]] != YELLOW:
+                #     valid_piece = i
+                #     break
+                # i += 1
 
             return valid_piece
 
@@ -207,58 +214,85 @@ class Solver:
                 seq.append(Y_ROT_PRIME)
             return seq
 
-        def get_not_exists_sequence(front, right, left, back):
+        def get_not_exists_sequence():
             # valid piece exists on right side of front face
-            if front[1][2] != YELLOW and right[1][0] != YELLOW:
+            if self.cube[FRONT, 1, 2] != YELLOW and self.cube[RIGHT, 1, 0] != YELLOW:
                 return [
                     UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME, FRONT_PRIME,
                     UP, FRONT
                 ]
-            # valid piece exists on left side of front face
-            if front[1][0] != YELLOW and left[1][2] != YELLOW:
+            if self.cube[FRONT, 1, 0] != YELLOW and self.cube[LEFT, 1, 2] != YELLOW:
                 return [
                     Y_ROT, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
                     FRONT_PRIME, UP, FRONT
                 ]
-            # valid piece exists on left side of left face
-            if left[1][0] != YELLOW and back[1][2] != YELLOW:
+            if self.cube[LEFT, 1, 0] != YELLOW and self.cube[BACK, 1, 2] != YELLOW:
                 return [
                     Y_ROT, Y_ROT, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
                     FRONT_PRIME, UP, FRONT
                 ]
-            # valid piece exists on right side of right face
-            if right[1][2] != YELLOW and back[1][0] != YELLOW:
+            if self.cube[RIGHT, 1, 2] != YELLOW and self.cube[BACK, 1, 0] != YELLOW:
                 return [
                     Y_ROT_PRIME, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
                     FRONT_PRIME, UP, FRONT
                 ]
 
+            # # valid piece exists on right side of front face
+            # if front[1][2] != YELLOW and right[1][0] != YELLOW:
+            #     return [
+            #         UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME, FRONT_PRIME,
+            #         UP, FRONT
+            #     ]
+            # # valid piece exists on left side of front face
+            # if front[1][0] != YELLOW and left[1][2] != YELLOW:
+            #     return [
+            #         Y_ROT, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
+            #         FRONT_PRIME, UP, FRONT
+            #     ]
+            # # valid piece exists on left side of left face
+            # if left[1][0] != YELLOW and back[1][2] != YELLOW:
+            #     return [
+            #         Y_ROT, Y_ROT, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
+            #         FRONT_PRIME, UP, FRONT
+            #     ]
+            # valid piece exists on right side of right face
+            # if right[1][2] != YELLOW and back[1][0] != YELLOW:
+            #     return [
+            #         Y_ROT_PRIME, UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
+            #         FRONT_PRIME, UP, FRONT
+            #     ]
+
         while not self.check_middle_layer():
-            front_face, top_face, right_face, left_face, _ = self.get_faces()
-            back_face = self.cube.get_face_from_orient(BACK)
+            print("stuck in middle layer")
+            #front_face, top_face, right_face, left_face, _ = self.get_faces()
+            # back_face = self.cube.get_face_from_orient(BACK)
 
             # get valid piece
-            valid_piece = get_valid_piece(
-                front_face, right_face, back_face, left_face)
+            valid_piece = get_valid_piece()
 
             # piece exists
             if valid_piece is not None:
                 # move valid piece to front face
                 self.cube.apply_seq(make_front_face(valid_piece))
 
-                front_face, top_face, right_face, left_face, _ = self.get_faces(
-                )
-                back_face = self.cube.get_face_from_orient(BACK)
+                # front_face, top_face, right_face, left_face, _ = self.get_faces(
+                # )
+                # back_face = self.cube.get_face_from_orient(BACK)
 
                 # make piece go to correct location
-                while front_face[0][1] != front_face[1][1]:
+                while self.cube[FRONT, 0, 1] != self.cube[FRONT, 1, 1]:
                     self.cube.apply_seq([UP_PRIME, Y_ROT_PRIME])
-                    front_face, top_face, right_face, left_face, _ = self.get_faces(
-                    )
-                    back_face = self.cube.get_face_from_orient(BACK)
+
+
+                # # make piece go to correct location
+                # while front_face[0][1] != front_face[1][1]:
+                #     self.cube.apply_seq([UP_PRIME, Y_ROT_PRIME])
+                #     front_face, top_face, right_face, left_face, _ = self.get_faces(
+                #     )
+                #     back_face = self.cube.get_face_from_orient(BACK)
 
                 # move piece down right
-                if top_face[2][1] == right_face[1][1]:
+                if self.cube[UP, 2, 1] == self.cube[RIGHT, 1, 1]:
                     self.cube.apply_seq(
                         [
                             UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
@@ -271,12 +305,35 @@ class Solver:
                             UP_PRIME, LEFT_PRIME, UP, LEFT, UP, FRONT,
                             UP_PRIME, FRONT_PRIME
                         ])
+
+                # # move piece down right
+                # if top_face[2][1] == right_face[1][1]:
+                #     self.cube.apply_seq(
+                #         [
+                #             UP, RIGHT, UP_PRIME, RIGHT_PRIME, UP_PRIME,
+                #             FRONT_PRIME, UP, FRONT
+                #         ])
+
+                # # move piece down left
+                # else:
+                #     self.cube.apply_seq(
+                #         [
+                #             UP_PRIME, LEFT_PRIME, UP, LEFT, UP, FRONT,
+                #             UP_PRIME, FRONT_PRIME
+                #         ])
+
             # piece does not exist
             else:
                 # apply sequence for this case
                 self.cube.apply_seq(
-                    get_not_exists_sequence(
-                        front_face, right_face, left_face, back_face))
+                    get_not_exists_sequence())
+
+            # piece does not exist
+            # else:
+            #     # apply sequence for this case
+            #     self.cube.apply_seq(
+            #         get_not_exists_sequence(
+            #             front_face, right_face, left_face, back_face))
 
     def check_middle_layer(self):
         """
@@ -340,7 +397,8 @@ class Solver:
 
             yellow_count = top_right + top_left + bottom_right + bottom_left
             if yellow_count == 0:
-                while not self.cube.get_face_from_orient(LEFT)[0][2] == YELLOW:
+                # while not self.cube.get_face_from_orient(LEFT)[0][2] == YELLOW:
+                while not self.cube[LEFT, 0, 2] == YELLOW:
                     self.cube.apply(UP)
             if yellow_count == 1:
                 if top_left:
@@ -411,7 +469,8 @@ class Solver:
                 break
             solved_color = None
             for color in [ORANGE, GREEN, RED, BLUE]:
-                face = self.cube.get_face_from_color(color)
+                # face = self.cube.get_face_from_color(color)
+                face = self.cube[color]
                 center = self.cube[face, 1, 1]
                 if ((self.cube[face, 0, 0] == center)
                         and (self.cube[face, 0, 1] == center)

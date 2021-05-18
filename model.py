@@ -56,46 +56,47 @@ class Cube:
         self.actions = []
 
     def set_state(self, data):
-        self._color_dict[self._orient_dict[FRONT]] = data["Front Face"]
-        self._color_dict[self._orient_dict[UP]] = data["Up Face"]
-        self._color_dict[self._orient_dict[DOWN]] = data["Down Face"]
-        self._color_dict[self._orient_dict[BACK]] = data["Back Face"]
-        self._color_dict[self._orient_dict[LEFT]] = data["Left Face"]
-        self._color_dict[self._orient_dict[RIGHT]] = data["Right Face"]
+        self._color_dict[YELLOW] = data["Up Face"]
+        self._color_dict[DOWN] = data["Down Face"]
+        self._color_dict[LEFT] = data["Left Face"]
+        self._color_dict[RIGHT] = data["Right Face"]
+        self._color_dict[BACK] = data["Back Face"]
+        self._color_dict[FRONT] = data["Front Face"]
 
     def __str__(self):
         """
         Returns current state of rubik's cube as a string.
         """
-        up_face = self.get_face_from_orient(UP)
-        down_face = self.get_face_from_orient(DOWN)
-        left_face = self.get_face_from_orient(LEFT)
-        right_face = self.get_face_from_orient(RIGHT)
-        back_face = self.get_face_from_orient(BACK)
-        front_face = self.get_face_from_orient(FRONT)
+        up_face = self[UP]
+        down_face = self[DOWN]
+        left_face = self[LEFT]
+        right_face = self[RIGHT]
+        back_face = self[BACK]
+        front_face = self[FRONT]
 
+        key = {1: "y", 2: "w", 4: "r", 8: "o", 16: "g", 32: "b"}
         out = ""
 
         # prints up
         for i in range(3):
-            out += "         " + up_face[i][0] + "  " + up_face[i][
-                1] + "  " + up_face[i][2] + "            " + "\n"
+            out += "         " + key[up_face[i][0]] + "  " + key[up_face[i][
+                1]] + "  " + key[up_face[i][2]] + "            " + "\n"
 
         # prints middle section
         for i in range(3):
-            out += left_face[i][0] + "  " + left_face[i][1] + "  " + left_face[
-                i][2] + "  "
-            out += front_face[i][0] + "  " + front_face[i][
-                1] + "  " + front_face[i][2] + "  "
-            out += right_face[i][0] + "  " + right_face[i][
-                1] + "  " + right_face[i][2] + "  "
-            out += back_face[i][0] + "  " + back_face[i][1] + "  " + back_face[
-                i][2] + "  " + "\n"
+            out += key[left_face[i][0]] + "  " + key[left_face[i][1]] + "  " + key[left_face[
+                i][2]] + "  "
+            out += key[front_face[i][0]] + "  " + key[front_face[i][
+                1]] + "  " + key[front_face[i][2]] + "  "
+            out += key[right_face[i][0]] + "  " + key[right_face[i][
+                1]] + "  " + key[right_face[i][2]] + "  "
+            out += key[back_face[i][0]] + "  " + key[back_face[i][1]] + "  " + key[back_face[
+                i][2]] + "  " + "\n"
 
         # prints bottom section
         for i in range(3):
-            out += "         " + down_face[i][0] + "  " + down_face[i][
-                1] + "  " + down_face[i][2] + "            " + "\n"
+            out += "         " + key[down_face[i][0]] + "  " + key[down_face[i][
+                1]] + "  " + key[down_face[i][2]] + "            " + "\n"
 
         return out
 
@@ -111,14 +112,16 @@ class Cube:
             equal = True
             for orient in list(self._orient_dict.keys()):
                 #determines if two cubes have faces in the same orientation
-                equal = equal and (
-                    self.get_color_from_orient(orient)
-                    == other.get_color_from_orient(orient))
+                equal = equal and (self._orient_dict[orient] == other._orient_dict[orient])
+                # equal = equal and (
+                #     self.get_color_from_orient(orient)
+                #     == other.get_color_from_orient(orient))
 
             if equal:
                 #now check the actual contents of each face which need to match for the cubes to be equal
                 for color, face in self._color_dict.items():
-                    other_face = other.get_face_from_color(color)
+                    other_face = other._color_dict[color]
+                    # other_face = other.get_face_from_color(color)
                     face_equal = True
                     for i in range(3):
                         for j in range(3):
@@ -388,3 +391,14 @@ class Cube:
         """
         assert len(self.actions) > 0
         self.apply(INVERSE[self.actions[-1:]])
+
+    # def get_face_from_color(self, color):
+    #     for key in self._color_dict.keys():
+    #         if self._color_dict[key] == color:
+    #             return key
+
+    # def get_face_from_orient(self, orient):
+    #     return self._color_dict[self._orient_dict[orient]]
+
+cube = Cube()
+print(cube[ORANGE])

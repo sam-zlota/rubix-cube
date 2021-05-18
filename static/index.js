@@ -28,12 +28,12 @@ var buttons = [[button1_button, button2_button, button3_button],
                 [button7_button, button8_button, button9_button]];
 
 const changeFace_button = document.querySelector(".change-face");
-var cubeData = {"Front Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]], 
+var cubeData = {"Front Face": [[orange, orange, orange],[orange, blue, orange],[orange, orange, orange]], 
                 "Left Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]], 
-                "Right Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]], 
-                "Back Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]], 
-                "Up Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]], 
-                "Down Face": [[orange, orange, orange],[orange, orange, orange],[orange, orange, orange]]}
+                "Right Face": [[orange, orange, orange],[orange, red, orange],[orange, orange, orange]], 
+                "Back Face": [[orange, orange, orange],[orange, green, orange],[orange, orange, orange]], 
+                "Up Face": [[orange, orange, orange],[orange, yellow, orange],[orange, orange, orange]], 
+                "Down Face": [[orange, orange, orange],[orange, white, orange],[orange, orange, orange]]}
 
 var newData = ""
 solveCube_button.addEventListener("click", function(){
@@ -57,8 +57,10 @@ resetCube_button.addEventListener("click", function(){
         for (k = 0; k < currentFaceData.length; k++) {
             const currentRow = currentFaceData[k]
             for (j = 0; j < currentRow.length; j++) {
-                // reset cube to orange
-                cubeData[Object.keys(cubeData)[i]][k][j] = orange
+                if (!(k == 1 && j == 1)) {
+                    // reset cube to orange
+                    cubeData[Object.keys(cubeData)[i]][k][j] = orange
+                }
             }
         }
     }
@@ -69,7 +71,7 @@ resetCube_button.addEventListener("click", function(){
 
 function updateCube(face) {
     const data = cubeData[face]
-
+    console.log(data)
     for (i = 0; i < data.length; i++) {
         const currentRow = data[i]
         for (k = 0; k < currentRow.length; k++) {
@@ -157,16 +159,16 @@ button4_button.addEventListener("click", function(){
     cubeData[currentFace][1][0] = nextColor
 });
 
-button5_button.addEventListener("click", function(){
-    const style = getComputedStyle(button5_button);
-    var currentColor = style.backgroundColor;
+// button5_button.addEventListener("click", function(){
+//     const style = getComputedStyle(button5_button);
+//     var currentColor = style.backgroundColor;
 
-    var nextColor = getNextColor(currentColor);
-    button5_button.style.backgroundColor = nextColor;
+//     var nextColor = getNextColor(currentColor);
+//     button5_button.style.backgroundColor = nextColor;
 
-    const currentFace = faceText_h3.innerHTML
-    cubeData[currentFace][1][1] = nextColor
-});
+//     const currentFace = faceText_h3.innerHTML
+//     cubeData[currentFace][1][1] = nextColor
+// });
 
 button6_button.addEventListener("click", function(){
     const style = getComputedStyle(button6_button);
@@ -230,3 +232,4 @@ function positionButtons() {
 }
 
 positionButtons()
+updateCube("Front Face")

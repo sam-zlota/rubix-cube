@@ -11,12 +11,12 @@ def transform_data(data):
     Transforms data from rgb to one letter string format
     '''
     transform_key = {
-        "rgb(255, 165, 0)": "o",
-        "rgb(0, 128, 0)": "g",
-        "rgb(255, 0, 0)": "r",
-        "rgb(255, 255, 0)": "y",
-        "rgb(255, 255, 255)": "w",
-        "rgb(0, 0, 255)": "b"
+        "rgb(255, 165, 0)": 8,
+        "rgb(0, 128, 0)": 16,
+        "rgb(255, 0, 0)": 4,
+        "rgb(255, 255, 0)": 1,
+        "rgb(255, 255, 255)": 2,
+        "rgb(0, 0, 255)": 32
     }
     new_data = {}
 
@@ -39,7 +39,6 @@ def transform_data(data):
 def solve_cube(cube_data):
     # transform rgb into single letter strings
     transformed_data = transform_data(cube_data)
-
     # create cube and set its state
     cube = Cube()
     cube.set_state(transformed_data)
@@ -73,7 +72,6 @@ def double():
 @app.route("/test", methods=["POST"])
 def test():
     if request.method == "POST":
-        response_data = {"message": "json received"}
         res = request.get_json()
         solved_cube = solve_cube(res)
         return make_response(json.dumps(res), 200)

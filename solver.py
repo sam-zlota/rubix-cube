@@ -84,9 +84,9 @@ class Solver:
 
             if self.cube[FRONT, 2, 2] == WHITE:
                 front_color = self.cube[DOWN, 0, 2]
-            elif self.cube[RIGHT, 2, 0] == WHITE:
-                front_color = self.cube[RIGHT, 2, 2]
-            elif self.cube[DOWN, 0, 2] == WHITE:
+            if self.cube[RIGHT, 2, 0] == WHITE:
+                front_color = self.cube[FRONT, 2, 2]
+            if self.cube[DOWN, 0, 2] == WHITE:
                 front_color = self.cube[RIGHT, 2, 0]
 
             while self.cube[FRONT, 1, 1] != front_color:
@@ -111,7 +111,7 @@ class Solver:
         while not self.check_white_corners():
             print("stuck in white corners")
             right_corner = (
-                (self.cube[UP, 2, 2] == WHITE)
+                self.cube[UP, 2, 2] == WHITE
                 and (self.cube[FRONT, 0, 2]) == (self.cube[FRONT, 1, 1])
                 and (self.cube[RIGHT, 0, 0]) == self.cube[RIGHT, 1, 1])
 
@@ -191,7 +191,7 @@ class Solver:
             # attempts to find valid top layer edge piece
             while valid_piece is None and i < 4:
                 # if both top and front faces are not yellow, then valid
-                if self.cube[faces_to_search[i], 0, 1] != YELLOW and self.cube[UP, top_edge_loc[i][0], top_edge_loc[i][0]] != YELLOW:
+                if self.cube[faces_to_search[i], 0, 1] != YELLOW and self.cube[UP, top_edge_loc[i][0], top_edge_loc[i][1]] != YELLOW:
                     valid_piece = i
                     break
                 i += 1
@@ -470,12 +470,17 @@ class Solver:
             solved_color = None
             for color in [ORANGE, GREEN, RED, BLUE]:
                 # face = self.cube.get_face_from_color(color)
-                face = self.cube[color]
-                center = self.cube[face, 1, 1]
-                if ((self.cube[face, 0, 0] == center)
-                        and (self.cube[face, 0, 1] == center)
-                        and (self.cube[face, 0, 2] == center)):
+                center = self.cube[color, 1, 1]
+                if ((self.cube[color, 0, 0] == center)
+                        and (self.cube[color, 0, 1] == center)
+                        and (self.cube[color, 0, 2] == center)):
                     solved_color = center
+                # face = self.cube[color]
+                # center = self.cube[face, 1, 1]
+                # if ((self.cube[face, 0, 0] == center)
+                #         and (self.cube[face, 0, 1] == center)
+                #         and (self.cube[face, 0, 2] == center)):
+                #     solved_color = center
                 else:
                     self.cube.apply(Y_ROT_PRIME)
 

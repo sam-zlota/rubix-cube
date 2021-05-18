@@ -45,6 +45,12 @@ def solve_cube(cube_data):
 
     # create solver and solve cube
     solver = Solver(cube)
+    #print(cube)
+    cube.print_color_dict()
+    #cube.print_orient_dict()
+    
+    solver.solve()
+    
     print(cube)
     return ''
 

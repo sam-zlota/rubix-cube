@@ -275,10 +275,12 @@ def speed_test(n):
     start_time = time.time()
     for cube in cube_list:
         s = Solver(cube)
+        print(c)
         s.solve()
     print("Finished solving", n, "cubes")
     finish_time = time.time() - start_time
     print(finish_time, "seconds")
+
 
 
 if __name__ == "__main__":

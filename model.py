@@ -55,6 +55,12 @@ class Cube:
             })
         self.actions = []
 
+    def print_orient_dict(self):
+        print(f'orient dict: {self._orient_dict}')
+
+    def print_color_dict(self):
+        print(f'color dict {self._color_dict}')
+
     def set_state(self, data):
         self._color_dict[YELLOW] = data["Up Face"]
         self._color_dict[DOWN] = data["Down Face"]
@@ -400,5 +406,3 @@ class Cube:
     # def get_face_from_orient(self, orient):
     #     return self._color_dict[self._orient_dict[orient]]
 
-cube = Cube()
-print(cube[ORANGE])

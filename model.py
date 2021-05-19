@@ -63,11 +63,11 @@ class Cube:
 
     def set_state(self, data):
         self._color_dict[YELLOW] = data["Up Face"]
-        self._color_dict[DOWN] = data["Down Face"]
-        self._color_dict[LEFT] = data["Left Face"]
-        self._color_dict[RIGHT] = data["Right Face"]
-        self._color_dict[BACK] = data["Back Face"]
-        self._color_dict[FRONT] = data["Front Face"]
+        self._color_dict[WHITE] = data["Down Face"]
+        self._color_dict[ORANGE] = data["Left Face"]
+        self._color_dict[RED] = data["Right Face"]
+        self._color_dict[GREEN] = data["Back Face"]
+        self._color_dict[BLUE] = data["Front Face"]
 
     def __str__(self):
         """
@@ -103,7 +103,8 @@ class Cube:
         for i in range(3):
             out += "         " + key[down_face[i][0]] + "  " + key[down_face[i][
                 1]] + "  " + key[down_face[i][2]] + "            " + "\n"
-
+        print("here")
+        print(out)
         return out
 
     def __eq__(self, other):

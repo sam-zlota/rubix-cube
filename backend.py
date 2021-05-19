@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request, make_respo
 import json
 from solver import Solver
 from model import Cube
+import multiprocessing
 
 app = Flask(__name__)
 
@@ -37,6 +38,10 @@ def transform_data(data):
 
 
 def solve_cube(cube_data):
+    def do_solve(s):
+        s.solve()
+        print(s.cube)
+
     # transform rgb into single letter strings
     transformed_data = transform_data(cube_data)
     # create cube and set its state
@@ -46,12 +51,25 @@ def solve_cube(cube_data):
     # create solver and solve cube
     solver = Solver(cube)
     #print(cube)
-    cube.print_color_dict()
     #cube.print_orient_dict()
     
-    solver.solve()
+    p = multiprocessing.Process(target=do_solve, args=(solver,))
+    p.start()
+
+    # Wait for 10 seconds or until process finishes
+    p.join(3)
+
+    # If thread is still active
+    if p.is_alive():
+        print("timeout after 3 seconds")
+
+        # Terminate - may not work if process is stuck for good
+        p.terminate()
+        # OR Kill - will work for sure, no chance for process to finish nicely however
+        # p.kill()
+
+        p.join()
     
-    print(cube)
     return ''
 
 

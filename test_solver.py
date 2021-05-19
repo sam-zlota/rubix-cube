@@ -186,7 +186,7 @@ def test_solve_cube():
     actions_list = []
     times_list = []
     solved = Cube()
-    for i in range(10000):
+    for i in range(1000):
         shuffle = get_random_seq()
         c = Cube()
         c.apply_seq(shuffle)
@@ -275,15 +275,16 @@ def speed_test(n):
     start_time = time.time()
     for cube in cube_list:
         s = Solver(cube)
-        print(c)
+        # print(c)
         s.solve()
     print("Finished solving", n, "cubes")
     finish_time = time.time() - start_time
     print(finish_time, "seconds")
+    print(1000* finish_time/n, "ms per cube")
 
 
 
 if __name__ == "__main__":
-    c = speed_test(1)
+    c = speed_test(10)
 
     # print(total_size(c))

@@ -1,24 +1,63 @@
 .input-container {
     display: grid;
+    width: 62%;
+    padding: 5px;
+    background-color: black;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
-      ". Top . ."
+      ". Up . ."
       "Left Front Right Back"
       ". Down . .";
   }
   
-  .Left { grid-area: Left; }
+.Left { grid-area: Left; }
+
+.Front { grid-area: Front; }
+
+.Up { grid-area: Up; }
+
+.Down { grid-area: Down; }
+
+.Right { grid-area: Right; }
+
+.Back { grid-area: Back; }
   
-  .Front { grid-area: Front; }
-  
-  .Top { grid-area: Top; }
-  
-  .Down { grid-area: Down; }
-  
-  .Right { grid-area: Right; }
-  
-  .Back { grid-area: Back; }
+
+.face-container {
+display: grid;
+width: 200px;
+height: 200px;
+grid-template-columns: 1fr 1fr 1fr;
+grid-template-rows: 1fr 1fr 1fr;
+gap: 0px 0px;
+grid-auto-flow: row;
+grid-template-areas:
+    "TL TT TR"
+    "ML MM MR"
+    "DL DD DR";
+}
+
+.TL { 
+    grid-area: TL;
+}
+
+.TT { grid-area: TT;
+ }
+
+.TR { grid-area: TR; }
+
+.MM { grid-area: MM; }
+
+.ML { grid-area: ML; }
+
+.MR { grid-area: MR; }
+
+.DD { grid-area: DD; }
+
+.DL { grid-area: DL; }
+
+.DR { grid-area: DR; }
   

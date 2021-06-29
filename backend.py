@@ -52,7 +52,10 @@ def solve_cube(cube_data):
     solver = Solver(cube)
     #print(cube)
     #cube.print_orient_dict()
-    
+
+    actions = solver.solve()
+    print(actions)
+    '''
     p = multiprocessing.Process(target=do_solve, args=(solver,))
     p.start()
 
@@ -69,13 +72,13 @@ def solve_cube(cube_data):
         # p.kill()
 
         p.join()
-    
+    '''
     return ''
 
 
 @app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
 
 
 def double_number(number):

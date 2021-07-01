@@ -28,6 +28,7 @@ class Solver:
         """
         # search face
         while not self.check_daisy():
+            print("daisy")
             if self.cube[UP, 2, 1] == WHITE:
                 self.cube.apply(UP)
             elif self.cube[FRONT, 0, 1] == WHITE:

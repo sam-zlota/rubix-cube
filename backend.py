@@ -19,61 +19,82 @@ def transform_data(data):
         "rgb(255, 255, 255)": 2,
         "rgb(0, 0, 255)": 32
     }
+    face_key = {
+        "Left": "Left Face",
+        "Front": "Front Face",
+        "Up": "Up Face",
+        "Down": "Down Face",
+        "Right": "Right Face",
+        "Back": "Back Face"
+    }
+
+    # to contain mapped cube data
     new_data = {}
 
     for key in data.keys():
+        # gets current cube face
         current_face = data[key]
 
+        # to contain list of list of color number identifiers
         new_colors = []
-        for row in current_face:
-            current_row = []
-            for current in row:
-                current_row.append(transform_key[current])
 
-            new_colors.append(current_row)
+        # to contain one row in face
+        current_row = []
 
-        new_data[key] = new_colors
+        for row_key in current_face.keys():
+
+            current_row.append(transform_key[current_face[row_key]])
+
+            if len(current_row) == 3:
+                new_colors.append(current_row)
+                current_row = []
+
+        new_data[face_key[key]] = new_colors
 
     return new_data
 
 
 def solve_cube(cube_data):
     def do_solve(s):
-        s.solve()
-        print(s.cube)
+        actions = s.solve()
+        print(f"Finished solving: {actions}")
+        return actions
 
     # transform rgb into single letter strings
     transformed_data = transform_data(cube_data)
+    print(f"Transformed data: {transformed_data}")
+
     # create cube and set its state
     cube = Cube()
     cube.set_state(transformed_data)
 
     # create solver and solve cube
     solver = Solver(cube)
-    #print(cube)
-    #cube.print_orient_dict()
+
+    #actions = solver.solve()
+    #print(f"Actions: {actions}")
 
     actions = solver.solve()
-    print(actions)
-    '''
-    p = multiprocessing.Process(target=do_solve, args=(solver,))
-    p.start()
+    print(f"Actions: {actions}")
+    return actions
 
-    # Wait for 10 seconds or until process finishes
-    p.join(3)
+    # p = multiprocessing.Process(target=do_solve, args=(solver,))
+    # p.start()
 
-    # If thread is still active
-    if p.is_alive():
-        print("timeout after 3 seconds")
+    # # Wait for 10 seconds or until process finishes
+    # p.join(3)
 
-        # Terminate - may not work if process is stuck for good
-        p.terminate()
-        # OR Kill - will work for sure, no chance for process to finish nicely however
-        # p.kill()
+    # # If thread is still active
+    # if p.is_alive():
+    #     print("timeout after 3 seconds")
 
-        p.join()
-    '''
-    return ''
+    #     # Terminate - may not work if process is stuck for good
+    #     p.terminate()
+    #     # OR Kill - will work for sure, no chance for process to finish nicely however
+    #     # p.kill()
+
+    #     p.join()
+
 
 
 @app.route("/")
@@ -96,12 +117,13 @@ def double():
         return render_template("index.html")
 
 
-@app.route("/test", methods=["POST"])
+@app.route("/solve", methods=["POST"])
 def test():
     if request.method == "POST":
         res = request.get_json()
+        print(f"Original data: {res}")
         solved_cube = solve_cube(res)
-        return make_response(json.dumps(res), 200)
+        return json.dumps(solved_cube)
 
 
 if __name__ == '__main__':

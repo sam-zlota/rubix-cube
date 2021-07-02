@@ -28,7 +28,7 @@ FRONT_PRIME = 11
 BACK_PRIME = 12
 
 """
-    3D rotation acorss X, Y, Z axis.
+    3D rotation across X, Y, Z axis.
 """
 # Z_ROT = "Z"
 Z_ROT = 13

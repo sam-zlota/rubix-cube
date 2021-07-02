@@ -1,8 +1,14 @@
+body {
+    background-color: #ababab;
+}
+
 .input-container {
+    grid-area: input-container;
     display: grid;
     width: 800px;
     padding: 5px;
-    background-color: black;
+    background-color: #474747;
+    border-radius: 5px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 0px 0px;
@@ -11,6 +17,7 @@
       ". Up . ."
       "Left Front Right Back"
       ". Down . .";
+
   }
   
 .Left { grid-area: Left; }
@@ -76,21 +83,21 @@ font-size: 15px;
 
 .input-output {
 display: grid;
-grid-template-columns: 1fr 1fr;
+grid-template-columns: 2fr 1fr;
 grid-template-rows: 1fr;
-gap: 0px 22px;
+gap: 0px 0px;
 grid-auto-flow: row;
 grid-template-areas:
     "input-container output-container";
 }
 
-.input-container { grid-area: input-container; }
 
-.output-container { grid-area: output-container;
+.output-container { 
+    grid-area: output-container;
     height: 610px;
-    width: 810px;
     overflow-y: scroll;
-background-color: black; }
+    justify-self: flex-start;
+ }
   
 .direction {
     background-color: green;
@@ -98,6 +105,6 @@ background-color: black; }
     border-radius: 5px;
     padding: 10px;
     text-align: center;
-    width: 200px;
+    width: 350px;
     font-size: 30px;
 }

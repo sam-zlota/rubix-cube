@@ -64,8 +64,27 @@ const Button = ({ name, action }) => {
 }
 
 const Direction = ({ content }) => {
+    const directionKey = {
+        23: "U",
+        22: "D",
+        3: "L",
+        21: "R",
+        5: "F",
+        6: "B",
+        7: "U'",
+        20: "D'",
+        9: "L'",
+        10: "R'",
+        11: "F'",
+        12: "B'",
+        15: "Y Rot",
+        19: "Y Rot'",
+        17: "X Rot",
+        18: "X Rot'"
+    }
+
     return (
-        e("div", { className: "direction" }, content)
+        e("div", { className: "direction" }, directionKey[content])
     )
 }
 
@@ -92,6 +111,7 @@ const CubeInput = () => {
 
     const [cube, setCube] = React.useState(resetCube())
     const [solveActions, setSolveActions] = React.useState([])
+    const [solved, setSolved] = React.useState(false)
 
     const changeColor = (face, faceCube) => {
         function getNextColor(currentColor) {
@@ -129,6 +149,13 @@ const CubeInput = () => {
             })
         }).then((response) => response.json())
         .then((data) => setSolveActions(data))
+        .then(() => setSolved(true))
+    }
+
+    const onReset = () => {
+        setSolved(false)
+
+        setCube(resetCube())
     }
 
     const setExampleCube = () => {
@@ -142,13 +169,22 @@ const CubeInput = () => {
         }
     }
 
+    const isSolved = () => {
+        if (solved) {
+            return e(CubeOutput, { data: solveActions })
+        }
+        else {
+            return null
+        }
+    }
+
     return (
         e("div", { className: "cube-input" },
             e(Button, { name: "Solve", action: () => solveCube() }),
-            e(Button, { name: "Reset", action: () => setCube(resetCube()) }),
+            e(Button, { name: "Reset", action: () => onReset() }),
             e("div", { className: "input-output" },
                 e(Grid, { cube: cube, changeColor: changeColor }),
-                e(CubeOutput, { data: solveActions })),
+                isSolved()),
             e("button", { onClick: () => setCube(setExampleCube()) }, "set example"))
     )
 }

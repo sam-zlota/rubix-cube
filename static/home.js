@@ -63,7 +63,56 @@ const Button = ({ name, action }) => {
     )
 }
 
-const Direction = ({ content }) => {
+const Direction = ({ content, changeState, idx, buttonState, isPrevActive, setDirectionActive }) => {
+
+    // gets color for current direction state
+    const getColor = () => {
+        if (buttonState["active"]) {
+            return "red"
+        }
+        else {
+            return "green"
+        }
+    }
+
+    const changeDirectionState = () => {
+        // set direction state to active
+        setDirectionActive(buttonState["key"])
+
+        // change state of the cube
+        changeState(idx)
+    }
+
+    // gets onClick function for current direction state
+    const getOnClick = () => {
+
+        var isValid = false
+
+        // valid if button is either index 0 or the previous button is already active
+        if (buttonState["key"] === 0) {
+            isValid = true
+        }
+        else {
+            // check to see if previous button is already active
+            if (isPrevActive(buttonState["key"] - 1)) {
+                isValid = true
+            }
+        }
+
+        if (buttonState["active"]) {
+            return () => console.log("button already active")
+        }
+        else if (!buttonState["active"] && isValid) {
+            return () => changeDirectionState()
+        }
+        else {
+            return () => console.log("not next button")
+        }
+        // NOTE: left off here
+        // I want to be able to click ahead buttons but not go back
+    }
+    
+
     const directionKey = {
         23: "U",
         22: "D",
@@ -84,15 +133,56 @@ const Direction = ({ content }) => {
     }
 
     return (
-        e("div", { className: "direction" }, directionKey[content])
+        e("div", { 
+            className: "direction",
+            style: { cursor: "pointer", backgroundColor: getColor() },
+            onClick: getOnClick() }, directionKey[content])
     )
 }
 
-const CubeOutput = ({ data }) => {
+const CubeOutput = ({ actions, changeState }) => {
+
+    // maps actions into button states
+    const setInitialState = () => {
+        // convert actions to list of objects [{ key: int, active: boolean }]
+        const buttonState = actions.map((element, idx) => {
+            return { "key": idx, "active": false }
+        })
+
+        return buttonState
+    }
+
+    // states for each button
+    const [buttonStates, setButtonStates] = React.useState(setInitialState())
+
+    // returns true if given button is active and false if not
+    const isPrevActive = (currentKey) => {
+        return buttonStates[currentKey]["active"]
+    }
+
+    // sets the given button to active
+    const setDirectionActive = (currentKey) => {
+        setButtonStates(buttonStates.map(element => {
+            if (element["key"] === currentKey) {
+                return { "key": element["key"], "active": true }
+            }
+            else {
+                return element
+            }
+        }))
+    }
+
     return (
         e("div", { className: "output-container" },
-            data.map((element, idx) => {
-                return e(Direction, { key: idx, content: element })
+            actions.map((element, idx) => {
+                return e(Direction, { 
+                    key: idx, 
+                    content: element, 
+                    changeState: changeState, 
+                    idx: idx,
+                    buttonState: buttonStates[idx],
+                    isPrevActive: isPrevActive,
+                    setDirectionActive: setDirectionActive })
             }))
     )
 }
@@ -111,6 +201,7 @@ const CubeInput = () => {
 
     const [cube, setCube] = React.useState(resetCube())
     const [solveActions, setSolveActions] = React.useState([])
+    const [solveStates, setSolveStates] = React.useState([])
     const [solved, setSolved] = React.useState(false)
 
     const changeColor = (face, faceCube) => {
@@ -148,7 +239,10 @@ const CubeInput = () => {
                 "content-type": "application/json"
             })
         }).then((response) => response.json())
-        .then((data) => setSolveActions(data))
+        .then((data) => {
+            setSolveActions(data["actions"])
+            setSolveStates(data["states"])
+        })
         .then(() => setSolved(true))
     }
 
@@ -169,9 +263,37 @@ const CubeInput = () => {
         }
     }
 
+    // changes cube to cube state of given action index
+    const changeState = (idx) => {
+        const currentState = solveStates[idx]
+
+        const transformKey = {
+            1: yellow,
+            2: white,
+            4: red,
+            8: orange,
+            16: green,
+            32: blue
+        }
+
+        var newState = {}
+
+        Object.keys(currentState).forEach(key => {
+            var newFace = {}
+
+            Object.keys(currentState[key]).forEach(faceKey => {
+                newFace[faceKey] = transformKey[currentState[key][faceKey]]
+            })
+
+            newState[key] = newFace
+        })
+        console.log(newState)
+        setCube(newState)
+    }
+
     const isSolved = () => {
         if (solved) {
-            return e(CubeOutput, { data: solveActions })
+            return e(CubeOutput, { actions: solveActions, changeState: changeState })
         }
         else {
             return null

@@ -54,6 +54,7 @@ class Cube:
                 ORANGE: face_init(ORANGE)
             })
         self.actions = []
+        self.cube_states = []  # holds list of cube objects as it is solved
 
     def print_orient_dict(self):
         print(f'orient dict: {self._orient_dict}')
@@ -118,14 +119,15 @@ class Cube:
         else:
             equal = True
             for orient in list(self._orient_dict.keys()):
-                #determines if two cubes have faces in the same orientation
-                equal = equal and (self._orient_dict[orient] == other._orient_dict[orient])
+                # determines if two cubes have faces in the same orientation
+                equal = equal and (
+                    self._orient_dict[orient] == other._orient_dict[orient])
                 # equal = equal and (
                 #     self.get_color_from_orient(orient)
                 #     == other.get_color_from_orient(orient))
 
             if equal:
-                #now check the actual contents of each face which need to match for the cubes to be equal
+                # now check the actual contents of each face which need to match for the cubes to be equal
                 for color, face in self._color_dict.items():
                     other_face = other._color_dict[color]
                     # other_face = other.get_face_from_color(color)
@@ -199,13 +201,13 @@ class Cube:
             row, col = index[1]
         else:
             face, row, col = index
-    
+
         try:
             return self._color_dict[face][row][col]
         except KeyError:
             return self._color_dict[self._orient_dict[face]][row][col]
-        
-    #FIXME
+
+    # FIXME
     def Z(self, prime):
         pass
         # if prime:
@@ -224,7 +226,7 @@ class Cube:
             Rotates entire cube about the Y axis.
         """
         if prime:
-            #ll
+            # ll
             # reorient sides
             self._reorient(
                 self._orient_dict[UP], self._orient_dict[RIGHT],
@@ -234,7 +236,7 @@ class Cube:
             # rotate bottom counterclockwise
             self._face_rotate(self._orient_dict[DOWN], False)
         else:
-            #rr
+            # rr
             # reorient sides
             self._reorient(
                 self._orient_dict[UP], self._orient_dict[LEFT],
@@ -249,7 +251,7 @@ class Cube:
             Rotates entire cube about the X axis.
         """
         if prime:
-            #down
+            # down
             # reorient sides
             self._reorient(
                 self._orient_dict[BACK], self._orient_dict[UP],
@@ -263,7 +265,7 @@ class Cube:
             # rotate back clockwise twice (180 degrees)
             self._face_rotate(self._orient_dict[BACK], True, k=2)
         else:
-            #up
+            # up
             # reorient sides
             self._reorient(
                 self._orient_dict[FRONT], self._orient_dict[DOWN],
@@ -384,6 +386,35 @@ class Cube:
         else:
             raise ValueError
         self.actions.append(action)
+        self.add_cube_state()
+
+    def add_cube_state(self):
+        # transform current state of cube and add to cube_states field
+        current_cube = {
+            "Left": self._color_dict[self._orient_dict[LEFT]],
+            "Front": self._color_dict[self._orient_dict[FRONT]],
+            "Up": self._color_dict[self._orient_dict[UP]],
+            "Down": self._color_dict[self._orient_dict[DOWN]],
+            "Right": self._color_dict[self._orient_dict[RIGHT]],
+            "Back": self._color_dict[self._orient_dict[BACK]]
+        }
+
+        transformed_cube = {}
+
+        for key in current_cube:
+            transformed_cube[key] = {
+                "TL": current_cube[key][0][0], 
+                "TT": current_cube[key][0][1], 
+                "TR": current_cube[key][0][2], 
+                "ML": current_cube[key][1][0], 
+                "MM": current_cube[key][1][1], 
+                "MR": current_cube[key][1][2], 
+                "DL": current_cube[key][2][0], 
+                "DD": current_cube[key][2][1], 
+                "DR": current_cube[key][2][2]
+            }
+
+        self.cube_states.append(transformed_cube)
 
     def apply_seq(self, seq):
         """
@@ -406,4 +437,3 @@ class Cube:
 
     # def get_face_from_orient(self, orient):
     #     return self._color_dict[self._orient_dict[orient]]
-

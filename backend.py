@@ -56,9 +56,9 @@ def transform_data(data):
 
 def solve_cube(cube_data):
     def do_solve(s):
-        actions = s.solve()
+        actions, states = s.solve()
         print(f"Finished solving: {actions}")
-        return actions
+        return actions, states
 
     # transform rgb into single letter strings
     transformed_data = transform_data(cube_data)
@@ -74,9 +74,9 @@ def solve_cube(cube_data):
     #actions = solver.solve()
     #print(f"Actions: {actions}")
 
-    actions = solver.solve()
+    actions, states = solver.solve()
     print(f"Actions: {actions}")
-    return actions
+    return actions, states
 
     # p = multiprocessing.Process(target=do_solve, args=(solver,))
     # p.start()
@@ -120,10 +120,16 @@ def double():
 @app.route("/solve", methods=["POST"])
 def test():
     if request.method == "POST":
+        # get inputed cube data from front end
         res = request.get_json()
         print(f"Original data: {res}")
-        solved_cube = solve_cube(res)
-        return json.dumps(solved_cube)
+
+        # gets actions and states from solving algorithm
+        cube_actions, cube_states = solve_cube(res)
+
+        cube_data = {"actions": cube_actions, "states": cube_states}
+
+        return json.dumps(cube_data)
 
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@ class Solver:
         self.solve_position_yellow_corners()
         self.solve_final_stage()
 
-        return self.cube.actions
+        return self.cube.actions, self.cube.cube_states
 
     def solve_daisy(self):
         """
@@ -28,7 +28,6 @@ class Solver:
         """
         # search face
         while not self.check_daisy():
-            print("daisy")
             if self.cube[UP, 2, 1] == WHITE:
                 self.cube.apply(UP)
             elif self.cube[FRONT, 0, 1] == WHITE:

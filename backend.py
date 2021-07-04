@@ -101,20 +101,9 @@ def solve_cube(cube_data):
 def home():
     return render_template('home.html')
 
-
-def double_number(number):
-    print('called double')
-    return int(number) * 2
-
-
-@app.route("/double", methods=["POST", "GET"])
-def double():
-    if request.method == "POST":
-        number = request.form["number"]
-        n = double_number(number)
-        return str(n)
-    else:
-        return render_template("index.html")
+@app.route("/directions")
+def direction():
+    return render_template("directions.html")
 
 
 @app.route("/solve", methods=["POST"])

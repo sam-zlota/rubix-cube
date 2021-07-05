@@ -1,1 +1,39 @@
-directions page
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Directions</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='home.css') }}">
+</head>
+<body>
+<ul class="navbar">
+    <li class="navlist"><a href="http://127.0.0.1:5000/">Solver</a></li>
+    <li class="navlist"><a href="http://127.0.0.1:5000/directions">Directions</a></li>
+</ul>
+<p class="direction-text">
+    This application takes in a rubix cube state and outputs the directions to solve it.<br><br>
+
+
+    One can click on the interactive cube UI to make it match the state of a rubix cube.<br><br>
+
+    One can also click the "Set Example" button to automatically generate an example cube.<br><br>
+
+
+    Once the cube is inputed, press solve. The directions to solve the inputed state of the cube 
+    will appear on the right of the cube.<br><br>
+
+    The directions can be clicked and will display the state of the cube after each direction is executed. This can 
+    help one solve the cube, as they can follow along and make sure their cube matches the UI cube.<br><br>
+
+    <a href="https://www.rubiks.com/media/guides/RBL_solve_guide_CUBE_US_5.375x8.375in_AW_27Feb2020_VISUAL.pdf">This is a link</a> to the instruction guide used 
+    to write this solving algorithm. Navigate to the page in the pdf where the directions are listed. These 
+    are the same directions which the algorithm outputs.<br><br>
+
+    Additionally... <br><br>
+    
+    Y Rot: Rotate the cube about the y-axis in the right direction<br><br>
+    Y Rot': Rotate the cube about the y-axis in the left direction<br><br>
+    X Rot: Rotate the cube about the x-axis in the up direction <br><br>
+    X Rot': Rotate the cube about the x-axis in the down direction
+</p>
+</body>
+</html>

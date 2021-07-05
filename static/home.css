@@ -135,3 +135,9 @@ background-color: #111;
 .active {
 background-color: #04AA6D;
 }
+
+.direction-text {
+    padding-left: 20%;
+    padding-right: 20%;
+    font-size: large;
+}

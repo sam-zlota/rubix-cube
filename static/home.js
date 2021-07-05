@@ -53,6 +53,9 @@ const Button = ({ name, action }) => {
     else if (name === "Reset") {
         color = "red"
     }
+    else if (name === "Set Example") {
+        color = "blue"
+    }
 
     return (
         e("button", {
@@ -240,10 +243,16 @@ const CubeInput = () => {
             })
         }).then((response) => response.json())
         .then((data) => {
-            setSolveActions(data["actions"])
-            setSolveStates(data["states"])
+            if (data["actions"] === "none" && data["states"] === "none") {
+                 console.log("invalid cube inputed")
+                 alert("Invalid cube inputed! Try again!")
+            }
+            else {
+                setSolveActions(data["actions"])
+                setSolveStates(data["states"])
+                setSolved(true)
+            }
         })
-        .then(() => setSolved(true))
     }
 
     const onReset = () => {
@@ -304,10 +313,10 @@ const CubeInput = () => {
         e("div", { className: "cube-input" },
             e(Button, { name: "Solve", action: () => solveCube() }),
             e(Button, { name: "Reset", action: () => onReset() }),
+            e(Button, { name: "Set Example", action: () => setCube(setExampleCube()) }),
             e("div", { className: "input-output" },
                 e(Grid, { cube: cube, changeColor: changeColor }),
-                isSolved()),
-            e("button", { onClick: () => setCube(setExampleCube()) }, "set example"))
+                isSolved()))
     )
 }
 

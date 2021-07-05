@@ -6,6 +6,10 @@ import multiprocessing
 
 app = Flask(__name__)
 
+def do_solve(s):
+    actions, states = s.solve()
+
+    return actions, states
 
 def transform_data(data):
     '''
@@ -55,11 +59,6 @@ def transform_data(data):
 
 
 def solve_cube(cube_data):
-    def do_solve(s):
-        actions, states = s.solve()
-        print(f"Finished solving: {actions}")
-        return actions, states
-
     # transform rgb into single letter strings
     transformed_data = transform_data(cube_data)
     print(f"Transformed data: {transformed_data}")
@@ -71,29 +70,30 @@ def solve_cube(cube_data):
     # create solver and solve cube
     solver = Solver(cube)
 
-    #actions = solver.solve()
-    #print(f"Actions: {actions}")
+    # actions, states = solver.solve()
+    # print(f"Actions: {actions}")
+    # return actions, states
 
-    actions, states = solver.solve()
-    print(f"Actions: {actions}")
-    return actions, states
+    p = multiprocessing.Process(target=do_solve, args=(solver,))
+    p.start()
 
-    # p = multiprocessing.Process(target=do_solve, args=(solver,))
-    # p.start()
+    # Wait for 10 seconds or until process finishes
+    p.join(2)
 
-    # # Wait for 10 seconds or until process finishes
-    # p.join(3)
+    # If thread is still active
+    if p.is_alive():
+        print("timeout after 3 seconds")
 
-    # # If thread is still active
-    # if p.is_alive():
-    #     print("timeout after 3 seconds")
+        # Terminate - may not work if process is stuck for good
+        #p.terminate()
+        # OR Kill - will work for sure, no chance for process to finish nicely however
+        p.kill()
 
-    #     # Terminate - may not work if process is stuck for good
-    #     p.terminate()
-    #     # OR Kill - will work for sure, no chance for process to finish nicely however
-    #     # p.kill()
+        p.join()
 
-    #     p.join()
+        return None, None
+    else:
+        return do_solve(solver)
 
 
 
@@ -116,9 +116,13 @@ def test():
         # gets actions and states from solving algorithm
         cube_actions, cube_states = solve_cube(res)
 
-        cube_data = {"actions": cube_actions, "states": cube_states}
+        if cube_actions is None and cube_states is None:
+            print("return none")
+            return json.dumps({"actions": "none", "states": "none"})
+        else:
+            cube_data = {"actions": cube_actions, "states": cube_states}
 
-        return json.dumps(cube_data)
+            return json.dumps(cube_data)
 
 
 if __name__ == '__main__':

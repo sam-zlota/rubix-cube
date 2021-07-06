@@ -235,7 +235,7 @@ const CubeInput = () => {
     }
 
     const solveCube = () => {
-        fetch("http://127.0.0.1:5000/solve", {
+        fetch("https://rubix-cube-app.herokuapp.com/solve", {
             method: "POST",
             body: JSON.stringify(cube),
             headers: new Headers({

@@ -7,10 +7,9 @@ Here are statistics for 10,000 cubes(100 scrambles each):
 
 <img src="https://user-images.githubusercontent.com/57266808/118036600-c46ec180-b33a-11eb-83e4-204bed3fa321.png" width="666" height="1000"/>
 
-
+Created a web app which allows a user to input the state of a cube and see the solve steps output on the screen.
 
 ### More to come:
-- JS web app with GUI cube editor.
 - photo integration (CV pipeline to accept 6 2D images as input).
 - implement AI solving methods. Because these have been implemented [before](https://github.com/benbotto/rubiks-cube-cracker)), we look to improve their upper bounds in time.
   - [thistlethwaite algorithm](https://www.jaapsch.net/puzzles/thistle.htm) (upper bound 52  moves, takes roughly 1-2min)
